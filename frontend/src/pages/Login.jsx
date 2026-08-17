@@ -11,7 +11,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "../components/ui/tabs"
 import { toast } from "sonner";
 import { GraduationCap, UserSquare2, ShieldCheck } from "lucide-react";
 
-const LOGO = "https://customer-assets-m6fa6gv7.emergentagent.net/job_d09d4ddb-8d6c-4717-8c23-3bcb599efb3f/artifacts/k6dw99js_logo-mrsm%20%281%29.jpg";
+const LOGO = "/mrsm-logo.png";
 
 export default function Login() {
   const { lang, login, toggleLang } = useAuth();
@@ -48,7 +48,7 @@ export default function Login() {
         <div className="absolute -left-16 -bottom-24 w-96 h-96 rounded-full bg-[#22D3EE]/25 blur-3xl" />
         <div className="absolute right-20 top-40 w-72 h-72 rounded-full bg-[#F472B6]/15 blur-3xl" />
         <div className="relative z-10">
-          <img src={LOGO} alt="MRSM Kuching" className="h-20 w-20 bg-white rounded-xl p-2 shadow-2xl" />
+          <img src={LOGO} alt="MRSM Kuching" className="h-24 w-24 drop-shadow-2xl" />
           <p className="mt-8 text-xs uppercase tracking-[0.3em] text-white/70">Maktab Rendah Sains Mara</p>
           <h1 className="mt-3 font-heading text-5xl xl:text-6xl font-extrabold leading-[1.05]">
             DocAtt<br /><span className="text-[#FFC72C]">MRSM Kuching</span>

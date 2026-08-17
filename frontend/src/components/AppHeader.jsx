@@ -5,7 +5,7 @@ import { t } from "../lib/i18n";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 
-const LOGO = "https://customer-assets-m6fa6gv7.emergentagent.net/job_d09d4ddb-8d6c-4717-8c23-3bcb599efb3f/artifacts/k6dw99js_logo-mrsm%20%281%29.jpg";
+const LOGO = "/mrsm-logo.png";
 
 export function AppHeader() {
   const nav = useNavigate();
@@ -75,7 +75,7 @@ export function AppHeader() {
             src={LOGO}
             alt="MRSM Kuching Logo"
             data-testid="mrsm-logo"
-            className="h-11 w-11 object-contain rounded-md"
+            className="h-11 w-11 object-contain"
           />
         </div>
       </div>
