@@ -91,14 +91,14 @@ function Overview() {
           ["modules", ov.modules],
           ["reports", ov.reports],
         ].map(([k, v]) => (
-          <Card key={k} className="p-5">
+          <Card key={k} className="p-5 rounded-xl border-neutral-200">
             <p className="text-xs uppercase tracking-widest text-neutral-500">{t(lang, k)}</p>
             <p className="mt-2 font-heading text-4xl font-extrabold" style={{color: "#4F46E5"}}>{v ?? 0}</p>
           </Card>
         ))}
       </div>
 
-      <Card className="p-6">
+      <Card className="p-6 rounded-xl border-neutral-200">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
           <h2 className="font-heading text-2xl font-bold">{t(lang, "submissions_by_form")}</h2>
           <Select value={moduleId} onValueChange={setModuleId}>
@@ -169,7 +169,8 @@ function StudentsTab() {
           <Plus className="h-4 w-4" /> {t(lang, "students")}
         </Button>
       </div>
-      <Card className="overflow-x-auto">
+      <Card className="overflow-hidden rounded-xl border-neutral-200">
+        <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="bg-neutral-50">
             <tr>
@@ -187,7 +188,7 @@ function StudentsTab() {
                 <td className="p-3 font-mono">{s.matrix_number}</td>
                 <td className="p-3">{s.form}</td>
                 <td className="p-3">{s.homeroom}</td>
-                <td className="p-3 text-right">
+                <td className="p-3 text-right whitespace-nowrap">
                   <Button size="icon" variant="ghost" onClick={() => setDlg(s)}><Pencil className="h-4 w-4" /></Button>
                   <Button size="icon" variant="ghost" onClick={() => del(s.id)}><Trash2 className="h-4 w-4 text-red-600" /></Button>
                 </td>
@@ -196,6 +197,7 @@ function StudentsTab() {
             {filtered.length === 0 && <tr><td colSpan={5} className="p-10 text-center text-neutral-500">{t(lang, "no_data")}</td></tr>}
           </tbody>
         </table>
+        </div>
       </Card>
       {dlg !== null && <StudentDialog s={dlg} homerooms={homerooms} onClose={() => setDlg(null)} onSaved={() => { setDlg(null); load(); }} />}
     </div>
@@ -269,7 +271,8 @@ function TeachersTab() {
           <Plus className="h-4 w-4" /> {t(lang, "teachers")}
         </Button>
       </div>
-      <Card className="overflow-x-auto">
+      <Card className="overflow-hidden rounded-xl border-neutral-200">
+        <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="bg-neutral-50">
             <tr>
@@ -287,7 +290,7 @@ function TeachersTab() {
                 <td className="p-3 font-mono">{t2.code}</td>
                 <td className="p-3">{t2.form}</td>
                 <td className="p-3">{t2.homeroom}</td>
-                <td className="p-3 text-right">
+                <td className="p-3 text-right whitespace-nowrap">
                   <Button size="icon" variant="ghost" onClick={() => setDlg(t2)}><Pencil className="h-4 w-4" /></Button>
                   <Button size="icon" variant="ghost" onClick={() => del(t2.id)}><Trash2 className="h-4 w-4 text-red-600" /></Button>
                 </td>
@@ -295,6 +298,7 @@ function TeachersTab() {
             ))}
           </tbody>
         </table>
+        </div>
       </Card>
       {dlg !== null && <TeacherDialog t2={dlg} onClose={() => setDlg(null)} onSaved={() => { setDlg(null); load(); }} />}
     </div>
