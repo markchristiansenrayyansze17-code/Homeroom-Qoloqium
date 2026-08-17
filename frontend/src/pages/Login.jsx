@@ -42,15 +42,18 @@ export default function Login() {
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       {/* LEFT — Brand panel */}
-      <div className="relative hidden lg:flex flex-col justify-between p-12 bg-[#C8102E] text-white overflow-hidden">
+      <div className="relative hidden lg:flex flex-col justify-between p-12 bg-[#1E3A5F] text-white overflow-hidden">
         <div className="absolute -right-24 -top-24 w-96 h-96 rounded-full bg-[#FFC72C]/20 blur-3xl" />
         <div className="absolute -left-16 -bottom-24 w-96 h-96 rounded-full bg-black/25 blur-3xl" />
         <div className="relative z-10">
           <img src={LOGO} alt="MRSM Kuching" className="h-20 w-20 bg-white rounded-xl p-2 shadow-2xl" />
           <p className="mt-8 text-xs uppercase tracking-[0.3em] text-white/70">Maktab Rendah Sains Mara</p>
           <h1 className="mt-3 font-heading text-5xl xl:text-6xl font-extrabold leading-[1.05]">
-            docAtt<br /><span className="text-[#FFC72C]">MRSM Kuching</span>
+            DocAtt<br /><span className="text-[#FFC72C]">MRSM Kuching</span>
           </h1>
+          <p className="mt-4 inline-block px-3 py-1 rounded-full bg-[#FFC72C] text-neutral-900 font-heading font-bold text-xs tracking-[0.28em]">
+            {t(lang, "school_motto")}
+          </p>
           <p className="mt-6 max-w-md text-white/85 text-base leading-relaxed">
             Homeroom reporting, weekly champions, and academic resources — all in one place.
           </p>
@@ -75,7 +78,7 @@ export default function Login() {
           <div className="lg:hidden flex items-center gap-3 mb-8">
             <img src={LOGO} alt="MRSM" className="h-14 w-14" />
             <div>
-              <h1 className="font-heading text-2xl font-extrabold">docAtt</h1>
+              <h1 className="font-heading text-2xl font-extrabold">DocAtt</h1>
               <p className="text-xs uppercase tracking-widest text-neutral-500">MRSM Kuching</p>
             </div>
           </div>
@@ -87,11 +90,11 @@ export default function Login() {
           <Card className="mt-8 p-6 md:p-8 border-neutral-200/80 shadow-sm">
             <Tabs value={role} onValueChange={(v) => { setRole(v); setIdent(""); }}>
               <TabsList className="grid w-full grid-cols-2 h-11 bg-neutral-100 p-1">
-                <TabsTrigger data-testid="tab-student" value="student" className="gap-2 data-[state=active]:bg-white data-[state=active]:text-[#C8102E]">
+                <TabsTrigger data-testid="tab-student" value="student" className="gap-2 data-[state=active]:bg-white data-[state=active]:text-[#1E3A5F]">
                   <GraduationCap className="h-4 w-4" />
                   {t(lang, "student")}
                 </TabsTrigger>
-                <TabsTrigger data-testid="tab-teacher" value="teacher" className="gap-2 data-[state=active]:bg-white data-[state=active]:text-[#C8102E]">
+                <TabsTrigger data-testid="tab-teacher" value="teacher" className="gap-2 data-[state=active]:bg-white data-[state=active]:text-[#1E3A5F]">
                   <UserSquare2 className="h-4 w-4" />
                   {t(lang, "teacher")}
                 </TabsTrigger>
@@ -125,7 +128,7 @@ export default function Login() {
                   data-testid="login-submit-btn"
                   type="submit"
                   disabled={loading || !ident.trim()}
-                  className="w-full h-11 bg-[#C8102E] hover:bg-[#A60D26] text-white font-semibold text-base"
+                  className="w-full h-11 bg-[#1E3A5F] hover:bg-[#152A45] text-white font-semibold text-base"
                 >
                   {loading ? "…" : t(lang, "login")}
                   <ShieldCheck className="ml-2 h-4 w-4" />
@@ -135,6 +138,8 @@ export default function Login() {
           </Card>
 
           <p className="mt-6 text-center text-xs text-neutral-500 tracking-wider">
+            <span className="font-heading font-bold text-neutral-800">{t(lang, "school_motto")}</span>
+            <span className="mx-2 text-neutral-300">·</span>
             {t(lang, "motto")}
           </p>
         </div>

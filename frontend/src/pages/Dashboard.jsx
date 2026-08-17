@@ -14,9 +14,9 @@ function Tile({ id, title, desc, icon: Icon, onClick, accent }) {
       <div className={`absolute -right-8 -top-8 w-40 h-40 rounded-full opacity-10 ${accent}`} />
       <div className="relative flex items-start justify-between">
         <div className={`h-12 w-12 rounded-xl flex items-center justify-center ${accent} bg-opacity-10`}>
-          <Icon className="h-6 w-6" style={{ color: "#C8102E" }} />
+          <Icon className="h-6 w-6" style={{ color: "#1E3A5F" }} />
         </div>
-        <ArrowUpRight className="h-5 w-5 text-neutral-400 group-hover:text-[#C8102E] group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all" />
+        <ArrowUpRight className="h-5 w-5 text-neutral-400 group-hover:text-[#1E3A5F] group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all" />
       </div>
       <div className="relative">
         <h3 className="font-heading text-2xl md:text-3xl font-bold text-neutral-900">{title}</h3>
@@ -36,7 +36,7 @@ export default function Dashboard() {
       <AppHeader />
       <main className="max-w-7xl mx-auto px-4 md:px-8 py-10 md:py-16">
         <div className="animate-fade-up">
-          <p className="text-xs uppercase tracking-[0.22em] text-[#C8102E] font-semibold">
+          <p className="text-xs uppercase tracking-[0.22em] text-[#1E3A5F] font-semibold">
             {t(lang, "welcome")}, {user.name}
           </p>
           <h1 className="mt-3 font-heading text-4xl md:text-5xl font-extrabold text-neutral-900 leading-tight">
@@ -57,7 +57,7 @@ export default function Dashboard() {
             title={t(lang, "module_master")}
             desc={t(lang, "module_master_desc")}
             icon={BookOpenCheck}
-            accent="bg-[#C8102E]"
+            accent="bg-[#1E3A5F]"
             onClick={() => nav("/module-master")}
           />
           <Tile
@@ -81,7 +81,7 @@ export default function Dashboard() {
             title={t(lang, "homeroom_arena")}
             desc={t(lang, "homeroom_arena_desc")}
             icon={ClipboardList}
-            accent="bg-[#C8102E]"
+            accent="bg-[#1E3A5F]"
             onClick={() => nav("/homeroom-arena")}
           />
         </div>
@@ -100,6 +100,8 @@ export default function Dashboard() {
         )}
 
         <p className="mt-16 text-center text-[10px] uppercase tracking-[0.35em] text-neutral-400">
+          <span className="font-heading font-bold text-[#1E3A5F]">{t(lang, "school_motto")}</span>
+          <span className="mx-3 text-neutral-300">·</span>
           {t(lang, "motto")}
         </p>
       </main>

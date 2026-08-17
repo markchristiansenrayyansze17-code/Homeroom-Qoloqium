@@ -14,7 +14,7 @@ import { Trophy, ArrowLeft, Plus, Trash2, Save, Medal } from "lucide-react";
 const RANK_STYLE = {
   1: { bg: "bg-[#FFC72C]", text: "text-neutral-900", label: "1st" },
   2: { bg: "bg-neutral-300", text: "text-neutral-900", label: "2nd" },
-  3: { bg: "bg-[#C8102E]", text: "text-white", label: "3rd" },
+  3: { bg: "bg-[#1E3A5F]", text: "text-white", label: "3rd" },
 };
 
 export default function ChampionOfTheWeek() {
@@ -72,12 +72,12 @@ export default function ChampionOfTheWeek() {
       <AppHeader />
       <main className="max-w-6xl mx-auto px-4 md:px-8 py-10">
         <button data-testid="back-dashboard-btn" onClick={() => nav("/dashboard")}
-                className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-[#C8102E]">
+                className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-[#1E3A5F]">
           <ArrowLeft className="h-4 w-4" /> {t(lang, "back")}
         </button>
 
         <div className="mt-4">
-          <p className="text-xs uppercase tracking-[0.22em] text-[#C8102E] font-semibold">02 · Weekly Highlights</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-[#1E3A5F] font-semibold">02 · Weekly Highlights</p>
           <h1 className="mt-2 font-heading text-4xl md:text-5xl font-extrabold flex items-center gap-3">
             <Trophy className="h-10 w-10 text-[#FFC72C]" /> {t(lang, "cotw")}
           </h1>
@@ -164,7 +164,7 @@ export default function ChampionOfTheWeek() {
 
         {isAdmin && (
           <div className="mt-10 flex justify-end">
-            <Button data-testid="cotw-save-btn" onClick={save} className="bg-[#C8102E] hover:bg-[#A60D26] gap-2">
+            <Button data-testid="cotw-save-btn" onClick={save} className="bg-[#1E3A5F] hover:bg-[#152A45] gap-2">
               <Save className="h-4 w-4" /> {t(lang, "save")}
             </Button>
           </div>

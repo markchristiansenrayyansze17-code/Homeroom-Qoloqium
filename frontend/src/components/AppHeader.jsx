@@ -29,7 +29,7 @@ export function AppHeader() {
                 aria-label="Home"
                 className="rounded-full h-10 w-10"
               >
-                <Home className="h-5 w-5 text-[#C8102E]" />
+                <Home className="h-5 w-5 text-[#1E3A5F]" />
               </Button>
               <Button
                 data-testid="nav-logout-btn"
@@ -45,7 +45,7 @@ export function AppHeader() {
           )}
           <div className="hidden sm:flex flex-col">
             <span className="font-heading font-extrabold text-lg leading-none tracking-tight text-neutral-900">
-              docAtt
+              DocAtt
             </span>
             <span className="text-[10px] uppercase tracking-[0.18em] text-neutral-500">
               MRSM Kuching
@@ -58,7 +58,7 @@ export function AppHeader() {
             <Badge
               data-testid="user-badge"
               variant="outline"
-              className="hidden md:inline-flex border-[#C8102E]/30 text-[#C8102E] font-medium"
+              className="hidden md:inline-flex border-[#1E3A5F]/30 text-[#1E3A5F] font-medium"
             >
               {user.role.toUpperCase()} · {user.name}
             </Badge>

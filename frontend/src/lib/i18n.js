@@ -1,8 +1,9 @@
 // Bilingual dictionary — EN + BM
 export const dict = {
   en: {
-    app_name: "docAtt MRSM Kuching",
+    app_name: "DocAtt MRSM Kuching",
     motto: "BERDISIPLIN BERILMU BERAMAL",
+    school_motto: "MRSM KUCHING NO1",
     login_title: "Sign in to continue",
     login_subtitle: "Access your homeroom dashboard",
     student: "Student",
@@ -81,8 +82,9 @@ export const dict = {
     already_submitted: "Your homeroom already submitted for this module",
   },
   bm: {
-    app_name: "docAtt MRSM Kuching",
+    app_name: "DocAtt MRSM Kuching",
     motto: "BERDISIPLIN BERILMU BERAMAL",
+    school_motto: "MRSM KUCHING NO1",
     login_title: "Log masuk untuk teruskan",
     login_subtitle: "Akses papan pemuka homeroom anda",
     student: "Pelajar",

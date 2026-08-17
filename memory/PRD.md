@@ -1,4 +1,4 @@
-# docAtt MRSM Kuching — PRD
+# DocAtt MRSM Kuching — PRD
 
 ## Problem
 Build a bilingual (EN/BM) homeroom reporting web app for MRSM Kuching. Students log in by matrix number, teachers by code (EG####), and admin uses the secret code `MK1993` in either login form. All submissions are **per homeroom** (Form 1–5).

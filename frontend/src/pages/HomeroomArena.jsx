@@ -44,13 +44,13 @@ export default function HomeroomArena() {
       <AppHeader />
       <main className="max-w-6xl mx-auto px-4 md:px-8 py-10">
         <button onClick={() => nav("/dashboard")}
-                className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-[#C8102E]">
+                className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-[#1E3A5F]">
           <ArrowLeft className="h-4 w-4" /> {t(lang, "back")}
         </button>
 
         <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.22em] text-[#C8102E] font-semibold">04 · History</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-[#1E3A5F] font-semibold">04 · History</p>
             <h1 className="mt-2 font-heading text-4xl md:text-5xl font-extrabold flex items-center gap-3">
               <ClipboardList className="h-10 w-10" /> {t(lang, "homeroom_arena")}
             </h1>
@@ -84,7 +84,7 @@ export default function HomeroomArena() {
             <Card key={r.id} data-testid={`arena-report-${r.id}`}
                   className="p-6 border-neutral-200">
               <div className="flex flex-wrap items-center gap-2">
-                <Badge variant="outline" className="border-[#C8102E]/40 text-[#C8102E]">{r.form}</Badge>
+                <Badge variant="outline" className="border-[#1E3A5F]/40 text-[#1E3A5F]">{r.form}</Badge>
                 <Badge variant="outline">{r.homeroom}</Badge>
                 <span className="text-xs text-neutral-500 ml-auto">
                   {new Date(r.created_at).toLocaleString()}
@@ -98,12 +98,12 @@ export default function HomeroomArena() {
               {r.description && <p className="mt-2 text-sm text-neutral-600 italic">{r.description}</p>}
               <div className="mt-3 flex flex-wrap gap-3">
                 {r.attendance_image && (
-                  <a href={r.attendance_image} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs text-[#C8102E] hover:underline">
+                  <a href={r.attendance_image} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs text-[#1E3A5F] hover:underline">
                     <ImageIcon className="h-3.5 w-3.5" /> {t(lang, "attendance_image")}
                   </a>
                 )}
                 {r.hr_upload && (
-                  <a href={r.hr_upload} download={r.hr_upload_name || "hr_upload"} className="inline-flex items-center gap-1 text-xs text-[#C8102E] hover:underline">
+                  <a href={r.hr_upload} download={r.hr_upload_name || "hr_upload"} className="inline-flex items-center gap-1 text-xs text-[#1E3A5F] hover:underline">
                     <FileDown className="h-3.5 w-3.5" /> {r.hr_upload_name || "HR file"}
                   </a>
                 )}

@@ -1,5 +1,5 @@
 """
-docAtt MRSM Kuching - Backend API
+DocAtt MRSM Kuching - Backend API
 """
 from fastapi import FastAPI, APIRouter, HTTPException, Depends, Header
 from dotenv import load_dotenv
@@ -25,7 +25,7 @@ ADMIN_CODE = "MK1993"
 client = AsyncIOMotorClient(MONGO_URL)
 db = client[DB_NAME]
 
-app = FastAPI(title="docAtt MRSM Kuching")
+app = FastAPI(title="DocAtt MRSM Kuching")
 api = APIRouter(prefix="/api")
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -506,7 +506,7 @@ async def homerooms(user: dict = Depends(current_user)):
 
 @api.get("/")
 async def root():
-    return {"app": "docAtt MRSM Kuching", "status": "ok"}
+    return {"app": "DocAtt MRSM Kuching", "status": "ok"}
 
 app.include_router(api)
 app.add_middleware(

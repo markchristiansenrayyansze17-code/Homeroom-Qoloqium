@@ -41,13 +41,13 @@ export default function Edustation() {
       <AppHeader />
       <main className="max-w-6xl mx-auto px-4 md:px-8 py-10">
         <button onClick={() => nav("/dashboard")}
-                className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-[#C8102E]">
+                className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-[#1E3A5F]">
           <ArrowLeft className="h-4 w-4" /> {t(lang, "back")}
         </button>
 
         <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.22em] text-[#C8102E] font-semibold">03 · Academic</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-[#1E3A5F] font-semibold">03 · Academic</p>
             <h1 className="mt-2 font-heading text-4xl md:text-5xl font-extrabold flex items-center gap-3">
               <GraduationCap className="h-10 w-10" /> {t(lang, "edustation")}
             </h1>
@@ -59,7 +59,7 @@ export default function Edustation() {
             </Select>
             {isAdmin && (
               <Button data-testid="add-subject-btn" onClick={() => setOpenDlg({})}
-                      className="bg-[#C8102E] hover:bg-[#A60D26] gap-2">
+                      className="bg-[#1E3A5F] hover:bg-[#152A45] gap-2">
                 <Plus className="h-4 w-4" /> {t(lang, "subject")}
               </Button>
             )}
@@ -72,11 +72,11 @@ export default function Edustation() {
           )}
           {subjects.map(s => (
             <Card key={s.id} data-testid={`subject-card-${s.id}`}
-                  className="p-6 border-neutral-200 hover:border-[#C8102E]/40 transition-colors">
+                  className="p-6 border-neutral-200 hover:border-[#1E3A5F]/40 transition-colors">
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-3">
-                  <div className="h-11 w-11 rounded-lg bg-[#C8102E]/10 flex items-center justify-center">
-                    <BookOpen className="h-5 w-5 text-[#C8102E]" />
+                  <div className="h-11 w-11 rounded-lg bg-[#1E3A5F]/10 flex items-center justify-center">
+                    <BookOpen className="h-5 w-5 text-[#1E3A5F]" />
                   </div>
                   <div>
                     <h3 className="font-heading text-xl font-bold">{s.name}</h3>
@@ -97,19 +97,19 @@ export default function Edustation() {
               <div className="mt-4 grid gap-2 text-sm">
                 {s.link && (
                   <a data-testid={`subj-link-${s.id}`} href={s.link} target="_blank" rel="noreferrer"
-                     className="inline-flex items-center gap-2 text-[#C8102E] hover:underline font-medium">
+                     className="inline-flex items-center gap-2 text-[#1E3A5F] hover:underline font-medium">
                     <ExternalLink className="h-3.5 w-3.5" /> {t(lang, "link")}
                   </a>
                 )}
                 {s.report_card && (
                   <a href={s.report_card} target="_blank" rel="noreferrer"
-                     className="inline-flex items-center gap-2 text-neutral-700 hover:text-[#C8102E]">
+                     className="inline-flex items-center gap-2 text-neutral-700 hover:text-[#1E3A5F]">
                     <ClipboardList className="h-3.5 w-3.5" /> {t(lang, "report_card")}
                   </a>
                 )}
                 {s.test_schedule && (
                   <a href={s.test_schedule} target="_blank" rel="noreferrer"
-                     className="inline-flex items-center gap-2 text-neutral-700 hover:text-[#C8102E]">
+                     className="inline-flex items-center gap-2 text-neutral-700 hover:text-[#1E3A5F]">
                     <CalendarClock className="h-3.5 w-3.5" /> {t(lang, "test_schedule")}
                   </a>
                 )}
@@ -177,7 +177,7 @@ function SubjectDialog({ subject, currentForm, onClose, onSaved }) {
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>{t(lang, "cancel")}</Button>
           <Button data-testid="subj-save-btn" onClick={save} disabled={!name.trim()}
-                  className="bg-[#C8102E] hover:bg-[#A60D26]">{t(lang, "save")}</Button>
+                  className="bg-[#1E3A5F] hover:bg-[#152A45]">{t(lang, "save")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -25,7 +25,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
         --card-foreground: 0 0% 7%;
         --popover: 0 0% 100%;
         --popover-foreground: 0 0% 7%;
-        --primary: 351 85% 42%;
+        --primary: 214 51% 25%;
         --primary-foreground: 0 0% 100%;
         --secondary: 45 100% 58%;
         --secondary-foreground: 0 0% 7%;
@@ -37,8 +37,8 @@ h1, h2, h3, h4, h5, h6, .font-heading {
         --destructive-foreground: 0 0% 100%;
         --border: 240 5% 88%;
         --input: 240 5% 88%;
-        --ring: 351 85% 42%;
-        --chart-1: 351 85% 42%;
+        --ring: 214 51% 25%;
+        --chart-1: 214 51% 25%;
         --chart-2: 45 100% 58%;
         --chart-3: 220 15% 40%;
         --chart-4: 24 90% 55%;
@@ -62,7 +62,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 .tile-hover:hover {
     transform: translateY(-4px);
-    box-shadow: 0 20px 40px -20px rgba(200, 16, 46, 0.25);
+    box-shadow: 0 20px 40px -20px rgba(30, 58, 95, 0.35);
 }
 
 .grain-overlay {
@@ -91,7 +91,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 .stagger > *:nth-child(3) { animation-delay: 0.20s; }
 .stagger > *:nth-child(4) { animation-delay: 0.28s; }
 
-.brand-red { color: #C8102E; }
-.bg-brand-red { background-color: #C8102E; }
+.brand-navy { color: #1E3A5F; }
+.bg-brand-navy { background-color: #1E3A5F; }
 .brand-yellow { color: #FFC72C; }
 .bg-brand-yellow { background-color: #FFC72C; }

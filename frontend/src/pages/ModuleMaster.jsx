@@ -62,13 +62,13 @@ export default function ModuleMaster() {
       <AppHeader />
       <main className="max-w-6xl mx-auto px-4 md:px-8 py-10">
         <button data-testid="back-dashboard-btn" onClick={() => nav("/dashboard")}
-                className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-[#C8102E]">
+                className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-[#1E3A5F]">
           <ArrowLeft className="h-4 w-4" /> {t(lang, "back")}
         </button>
 
         <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.22em] text-[#C8102E] font-semibold">01 · E-Reporting</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-[#1E3A5F] font-semibold">01 · E-Reporting</p>
             <h1 className="mt-2 font-heading text-4xl md:text-5xl font-extrabold">{t(lang, "module_master")}</h1>
             <p className="mt-2 text-neutral-600">
               {isAdmin ? t(lang, "manage") : user.homeroom}
@@ -84,7 +84,7 @@ export default function ModuleMaster() {
                 </SelectContent>
               </Select>
               <Button data-testid="admin-add-module-btn" onClick={() => setModOpen({})}
-                      className="bg-[#C8102E] hover:bg-[#A60D26]">+ {t(lang, "add")} {t(lang, "module")}</Button>
+                      className="bg-[#1E3A5F] hover:bg-[#152A45]">+ {t(lang, "add")} {t(lang, "module")}</Button>
             </div>
           )}
         </div>
@@ -120,7 +120,7 @@ export default function ModuleMaster() {
                   <div className="mt-4 flex flex-wrap gap-2">
                     {!isAdmin && !rep && st === "open" && (
                       <Button data-testid={`submit-module-${m.id}`} onClick={() => setSubmitOpen(m)}
-                              className="bg-[#C8102E] hover:bg-[#A60D26] gap-2">
+                              className="bg-[#1E3A5F] hover:bg-[#152A45] gap-2">
                         <Send className="h-4 w-4" /> {t(lang, "submit_report")}
                       </Button>
                     )}
@@ -251,7 +251,7 @@ function ReportDialog({ module, report, onClose, onSaved }) {
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>{t(lang, "cancel")}</Button>
           <Button data-testid="report-save-btn" onClick={submit} disabled={busy || !meeting.trim()}
-                  className="bg-[#C8102E] hover:bg-[#A60D26]">{t(lang, "save")}</Button>
+                  className="bg-[#1E3A5F] hover:bg-[#152A45]">{t(lang, "save")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -311,7 +311,7 @@ function ModuleDialog({ module, onClose, onSaved }) {
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>{t(lang, "cancel")}</Button>
           <Button data-testid="mod-save-btn" onClick={save} disabled={!title.trim() || !startAt || !deadline}
-                  className="bg-[#C8102E] hover:bg-[#A60D26]">{t(lang, "save")}</Button>
+                  className="bg-[#1E3A5F] hover:bg-[#152A45]">{t(lang, "save")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
