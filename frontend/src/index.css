@@ -8,9 +8,60 @@ body {
     font-family: 'DM Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #F9F9F8;
     color: #121212;
+    background-color: #FBF7F1;
+    background-image:
+        radial-gradient(1200px 800px at 92% -8%, rgba(255, 199, 44, 0.28), transparent 60%),
+        radial-gradient(900px 700px at -10% 10%, rgba(99, 102, 241, 0.22), transparent 55%),
+        radial-gradient(1000px 800px at 80% 100%, rgba(244, 114, 182, 0.20), transparent 55%),
+        radial-gradient(900px 700px at 15% 95%, rgba(16, 185, 129, 0.18), transparent 60%),
+        radial-gradient(700px 500px at 55% 45%, rgba(14, 165, 233, 0.10), transparent 60%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    min-height: 100vh;
 }
+
+/* Playful dotted grain overlay across the whole page */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+        radial-gradient(rgba(30, 58, 95, 0.06) 1px, transparent 1px),
+        radial-gradient(rgba(30, 58, 95, 0.04) 1px, transparent 1px);
+    background-size: 22px 22px, 44px 44px;
+    background-position: 0 0, 11px 11px;
+    opacity: 0.7;
+}
+
+/* Floating colorful confetti dots */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+        radial-gradient(circle at 12% 22%, #F59E0B 0 4px, transparent 5px),
+        radial-gradient(circle at 88% 30%, #4F46E5 0 5px, transparent 6px),
+        radial-gradient(circle at 20% 78%, #E11D48 0 4px, transparent 5px),
+        radial-gradient(circle at 75% 82%, #059669 0 5px, transparent 6px),
+        radial-gradient(circle at 55% 12%, #0EA5E9 0 3px, transparent 4px),
+        radial-gradient(circle at 8% 55%, #F472B6 0 3px, transparent 4px),
+        radial-gradient(circle at 95% 60%, #FBBF24 0 4px, transparent 5px),
+        radial-gradient(circle at 40% 90%, #6366F1 0 3px, transparent 4px);
+    opacity: 0.35;
+    animation: confetti-drift 18s ease-in-out infinite alternate;
+}
+
+@keyframes confetti-drift {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-8px, -14px, 0); }
+}
+
+.App { position: relative; z-index: 1; }
 
 h1, h2, h3, h4, h5, h6, .font-heading {
     font-family: 'Outfit', ui-sans-serif, system-ui, sans-serif;
@@ -19,7 +70,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 @layer base {
     :root {
-        --background: 60 8% 97%;
+        --background: 36 60% 97%;
         --foreground: 0 0% 7%;
         --card: 0 0% 100%;
         --card-foreground: 0 0% 7%;

@@ -68,7 +68,7 @@ export default function Login() {
       </div>
 
       {/* RIGHT — Login card */}
-      <div className="flex items-center justify-center p-6 md:p-12 relative">
+      <div className="flex items-center justify-center p-6 md:p-12 relative bg-transparent">
         <button
           data-testid="login-lang-toggle"
           onClick={toggleLang}
