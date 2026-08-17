@@ -1,0 +1,128 @@
+{
+  "theme": "light",
+  "typography": {
+    "heading_font": "Outfit",
+    "body_font": "DM Sans",
+    "weights": {
+      "headings": "600, 700, 800",
+      "body": "400, 500"
+    },
+    "scale": {
+      "h1": "text-4xl md:text-5xl tracking-tight leading-tight",
+      "h2": "text-2xl md:text-3xl tracking-tight",
+      "h3": "text-xl md:text-2xl",
+      "body": "text-base leading-relaxed",
+      "small": "text-sm",
+      "micro": "text-xs uppercase tracking-[0.1em]"
+    }
+  },
+  "colors": {
+    "primary": {
+      "DEFAULT": "#C8102E",
+      "foreground": "#FFFFFF",
+      "hover": "#A60D26"
+    },
+    "secondary": {
+      "DEFAULT": "#FFC72C",
+      "foreground": "#121212",
+      "hover": "#E6B328"
+    },
+    "background": {
+      "DEFAULT": "#F9F9F8",
+      "card": "#FFFFFF",
+      "paper": "#F3F4F1"
+    },
+    "foreground": {
+      "DEFAULT": "#121212",
+      "muted": "#52525B"
+    },
+    "border": "#E4E4E7",
+    "states": {
+      "success": "#16A34A",
+      "warning": "#D97706",
+      "error": "#DC2626",
+      "info": "#2563EB"
+    }
+  },
+  "layout": {
+    "general": "Left-aligned, asymmetric layouts. Generous spacing (p-6, p-8) to ensure elements do not feel cramped. A disciplined, official-yet-approachable structural hierarchy.",
+    "dashboard_grid": {
+      "mobile": "1 column, vertically stacked tiles.",
+      "desktop": "12-column grid system, gap-6 or gap-8.",
+      "tiles": {
+        "module_master": "col-span-12 md:col-span-8 lg:col-span-7 row-span-2",
+        "champion_of_the_week": "col-span-12 md:col-span-4 lg:col-span-5 row-span-1",
+        "edustation": "col-span-12 md:col-span-6 lg:col-span-5 row-span-1",
+        "homeroom_arena": "col-span-12 md:col-span-6 lg:col-span-7 row-span-1"
+      }
+    },
+    "spacing": "Base 8px system. Section gaps should be 32px to 64px.",
+    "surface": "Solid backgrounds for school apps, avoid excessive glassmorphism. Crisp 1px borders (border-border/40), minimal soft shadows (shadow-sm) on cards to ensure clarity."
+  },
+  "components": {
+    "login_page": "Split screen layout or centered card. Display motto 'BERDISIPLIN BERILMU BERAMAL' as an elegant tagline. Admin logs in with MK1993 via the standard inputs (no explicit admin tab).",
+    "bilingual_toggle": "Pill-shaped toggle switch in header for EN/BM selection.",
+    "tiles": "Cards with clean rectangular shapes or slight roundness (rounded-lg). Solid borders, clear left-aligned headings.",
+    "forms": "Submission form for E-Reporting must be clean. Use Shadcn components for file upload and date pickers. Submissions use Base64 encoding for MongoDB.",
+    "charts": "Recharts Pie chart for Admin Dashboard showing homeroom submissions by Form 1-5. Utilize official colors (variations of deep red and yellow + neutral greys) to differentiate segments.",
+    "icons": "Lucide React only. No emojis anywhere."
+  },
+  "responsive": {
+    "breakpoint": "Mobile-first approach. All designs must function perfectly on small screens before scaling up.",
+    "layout": "Grid stacks into a single column. Side-by-side elements reflow vertically.",
+    "typography": "Fluid scaling. H1 goes from text-3xl (mobile) to text-5xl (desktop).",
+    "overflow_guard": "Ensure max-w-full and overflow-x-hidden on main containers.",
+    "tap_targets": "Buttons and links must be minimum 44x44px for touch capability."
+  },
+  "accessibility": {
+    "contrast": "Text over backgrounds must exceed 4.5:1 ratio.",
+    "focus": "Clear focus rings (ring-2 ring-primary ring-offset-2) on interactive elements.",
+    "testing": "All interactive and key informational elements MUST include a data-testid attribute in kebab-case."
+  },
+  "image_urls": {
+    "logo": {
+      "url": "https://customer-assets-m6fa6gv7.emergentagent.net/job_d09d4ddb-8d6c-4717-8c23-3bcb599efb3f/artifacts/k6dw99js_logo-mrsm%20%281%29.jpg",
+      "description": "MRSM Kuching official logo. Place at top-right of the header."
+    },
+    "champion_1": {
+      "url": "https://images.unsplash.com/photo-1652305500057-0fcb348b62aa?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzB8MHwxfHNlYXJjaHwyfHxoaWdoJTIwc2Nob29sJTIwc3R1ZGVudHMlMjBjbGFzcyUyMHN0dWR5aW5nfGVufDB8fHx8MTc4Njk2NDkyNXww&ixlib=rb-4.1.0&q=85",
+      "description": "Group of students sitting in a room. Use in Champion of the Week leaderboard."
+    },
+    "champion_2": {
+      "url": "https://images.pexels.com/photos/34162713/pexels-photo-34162713.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Students attentively engaged in classroom setting. Use in Champion of the Week leaderboard."
+    },
+    "champion_3": {
+      "url": "https://images.pexels.com/photos/8419513/pexels-photo-8419513.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Students attentively sitting in a classroom. Use in Champion of the Week leaderboard."
+    },
+    "login_background": {
+      "url": "https://images.unsplash.com/photo-1785190095920-302ea67de2e0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NDh8MHwxfHNlYXJjaHwxfHxzY2hvb2wlMjBjYW1wdXMlMjBidWlsZGluZyUyMG1vZGVybnxlbnwwfHx8fDE3ODY5NjQ5MjV8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Modern brick architecture school building. Used as a subtle background for login page if split layout is adopted."
+    }
+  },
+  "instructions_to_main_agent": [
+    "Design for Mobile-First, ensuring that the 4-tile bento layout seamlessly stacks into a 1-column layout on mobile, keeping interactive elements easily tappable.",
+    "Strictly avoid emojis in the UI. Use Lucide-react for all icon needs.",
+    "Build the dashboard using standard HTML + Tailwind CSS inside React components. Use Shadcn components for forms, inputs, selects, and charts (Recharts).",
+    "Implement bilingual support toggles in the header for English (EN) and Bahasa Melayu (BM).",
+    "Adhere to the 'Authority, Clarity, Truth' palette combined with MRSM's colors. Don't use purple gradients or generic edtech blue.",
+    "For Typography, strictly use Outfit for headings and DM Sans for body. Do not use Inter or Roboto.",
+    "Implement the secret admin login mechanism: when user enters 'MK1993' in the student or teacher code input, they are routed to the Admin Dashboard (bypass regular student/teacher flows).",
+    "Render the admin pie chart visualizing submission completion by Forms (1-5) using Recharts.",
+    "Ensure 'BERDISIPLIN BERILMU BERAMAL' is elegantly integrated in the login page or footer.",
+    "Use data-testid attributes extensively on forms, inputs, buttons, and distinct UI sections for testing purposes.",
+    "Ensure generous padding inside cards (p-6 or p-8) and tight tracking for large headings."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Do not converge toward generic, on-distribution outputs. Create depth with layered design elements with z-index hierarchy and subtle shadows.",
+    "You MUST NOT center align the app container, i.e., do not add `.App { text-align: center; }` in the CSS file.",
+    "Always use modern button styles like pill-shaped, or sharp buttons with interaction animations & color relevant to the app style.",
+    "Never use AI assistant Emoji characters for icons.",
+    "Every interaction needs micro-animations - hover states, transitions, and entrance animations.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "Prioritize using pre-existing components from src/components/ui when applicable.",
+    "Use sonner for toasts notifications.",
+    "Use lucide-react for all iconography."
+  ]
+}

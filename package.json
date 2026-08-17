@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
+    "date-fns": "^4.4.0",
+    "lucide-react": "^1.31.0",
+    "recharts": "^3.10.1",
+    "sonner": "^2.0.8"
+  }
+}
