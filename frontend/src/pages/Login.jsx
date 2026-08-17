@@ -42,9 +42,11 @@ export default function Login() {
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       {/* LEFT — Brand panel */}
-      <div className="relative hidden lg:flex flex-col justify-between p-12 bg-[#1E3A5F] text-white overflow-hidden">
-        <div className="absolute -right-24 -top-24 w-96 h-96 rounded-full bg-[#FFC72C]/20 blur-3xl" />
-        <div className="absolute -left-16 -bottom-24 w-96 h-96 rounded-full bg-black/25 blur-3xl" />
+      <div className="relative hidden lg:flex flex-col justify-between p-12 text-white overflow-hidden"
+           style={{background: "linear-gradient(135deg, #1E3A5F 0%, #2E4F82 45%, #4F46E5 100%)"}}>
+        <div className="absolute -right-24 -top-24 w-96 h-96 rounded-full bg-[#FFC72C]/25 blur-3xl" />
+        <div className="absolute -left-16 -bottom-24 w-96 h-96 rounded-full bg-[#22D3EE]/25 blur-3xl" />
+        <div className="absolute right-20 top-40 w-72 h-72 rounded-full bg-[#F472B6]/15 blur-3xl" />
         <div className="relative z-10">
           <img src={LOGO} alt="MRSM Kuching" className="h-20 w-20 bg-white rounded-xl p-2 shadow-2xl" />
           <p className="mt-8 text-xs uppercase tracking-[0.3em] text-white/70">Maktab Rendah Sains Mara</p>

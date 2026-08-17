@@ -11,7 +11,7 @@ import { Label } from "../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "../components/ui/dialog";
 import { toast } from "sonner";
-import { GraduationCap, ArrowLeft, Plus, Pencil, Trash2, ExternalLink, ClipboardList, CalendarClock, BookOpen } from "lucide-react";
+import { GraduationCap, ArrowLeft, Plus, Pencil, Trash2, ExternalLink, BookOpen } from "lucide-react";
 
 const FORMS = ["Form 1", "Form 2", "Form 3", "Form 4", "Form 5"];
 
@@ -101,18 +101,6 @@ export default function Edustation() {
                     <ExternalLink className="h-3.5 w-3.5" /> {t(lang, "link")}
                   </a>
                 )}
-                {s.report_card && (
-                  <a href={s.report_card} target="_blank" rel="noreferrer"
-                     className="inline-flex items-center gap-2 text-neutral-700 hover:text-[#1E3A5F]">
-                    <ClipboardList className="h-3.5 w-3.5" /> {t(lang, "report_card")}
-                  </a>
-                )}
-                {s.test_schedule && (
-                  <a href={s.test_schedule} target="_blank" rel="noreferrer"
-                     className="inline-flex items-center gap-2 text-neutral-700 hover:text-[#1E3A5F]">
-                    <CalendarClock className="h-3.5 w-3.5" /> {t(lang, "test_schedule")}
-                  </a>
-                )}
               </div>
             </Card>
           ))}
@@ -137,13 +125,11 @@ function SubjectDialog({ subject, currentForm, onClose, onSaved }) {
   const [name, setName] = useState(subject?.name || "");
   const [teacher, setTeacher] = useState(subject?.teacher || "");
   const [link, setLink] = useState(subject?.link || "");
-  const [rc, setRc] = useState(subject?.report_card || "");
-  const [ts, setTs] = useState(subject?.test_schedule || "");
   const [form, setForm] = useState(subject?.form || currentForm);
 
   const save = async () => {
     try {
-      const body = { name, teacher, link, report_card: rc, test_schedule: ts, form };
+      const body = { name, teacher, link, form };
       if (isEdit) await http.put(`/subjects/${subject.id}`, body);
       else await http.post("/subjects", body);
       toast.success(t(lang, "saved"));
@@ -169,10 +155,6 @@ function SubjectDialog({ subject, currentForm, onClose, onSaved }) {
             <Input data-testid="subj-teacher" value={teacher} onChange={e => setTeacher(e.target.value)} /></div>
           <div><Label>{t(lang, "link")}</Label>
             <Input data-testid="subj-link" placeholder="https://..." value={link} onChange={e => setLink(e.target.value)} /></div>
-          <div><Label>{t(lang, "report_card")}</Label>
-            <Input value={rc} onChange={e => setRc(e.target.value)} placeholder="URL" /></div>
-          <div><Label>{t(lang, "test_schedule")}</Label>
-            <Input value={ts} onChange={e => setTs(e.target.value)} placeholder="URL" /></div>
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>{t(lang, "cancel")}</Button>

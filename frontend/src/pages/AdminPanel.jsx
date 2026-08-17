@@ -93,7 +93,7 @@ function Overview() {
         ].map(([k, v]) => (
           <Card key={k} className="p-5">
             <p className="text-xs uppercase tracking-widest text-neutral-500">{t(lang, k)}</p>
-            <p className="mt-2 font-heading text-4xl font-extrabold text-[#1E3A5F]">{v ?? 0}</p>
+            <p className="mt-2 font-heading text-4xl font-extrabold" style={{color: "#4F46E5"}}>{v ?? 0}</p>
           </Card>
         ))}
       </div>
@@ -129,8 +129,8 @@ function Overview() {
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="value" fill="#1E3A5F" name={t(lang, "submitted")} />
-                <Bar dataKey="total" fill="#FFC72C" name={t(lang, "homeroom") + "s"} />
+                <Bar dataKey="value" fill="#4F46E5" name={t(lang, "submitted")} />
+                <Bar dataKey="total" fill="#F59E0B" name={t(lang, "homeroom") + "s"} />
               </BarChart>
             </ResponsiveContainer>
           </div>
