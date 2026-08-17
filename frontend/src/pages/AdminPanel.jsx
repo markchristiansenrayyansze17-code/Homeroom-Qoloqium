@@ -39,11 +39,11 @@ export default function AdminPanel() {
         </div>
 
         <Tabs defaultValue="overview" className="mt-8">
-          <TabsList className="bg-neutral-100 p-1 h-11 flex-wrap">
-            <TabsTrigger data-testid="tab-overview" value="overview" className="gap-2"><PieIcon className="h-4 w-4" />{t(lang, "stats_overview")}</TabsTrigger>
-            <TabsTrigger data-testid="tab-students" value="students" className="gap-2"><Users className="h-4 w-4" />{t(lang, "students")}</TabsTrigger>
-            <TabsTrigger data-testid="tab-teachers" value="teachers" className="gap-2"><UserSquare2 className="h-4 w-4" />{t(lang, "teachers")}</TabsTrigger>
-            <TabsTrigger data-testid="tab-modules" value="modules" className="gap-2"><LayoutGrid className="h-4 w-4" />{t(lang, "modules")}</TabsTrigger>
+          <TabsList className="bg-neutral-100 p-1 h-auto grid grid-cols-2 md:grid-cols-4 gap-1 w-full">
+            <TabsTrigger data-testid="tab-overview" value="overview" className="gap-2 h-10 justify-center"><PieIcon className="h-4 w-4" />{t(lang, "stats_overview")}</TabsTrigger>
+            <TabsTrigger data-testid="tab-students" value="students" className="gap-2 h-10 justify-center"><Users className="h-4 w-4" />{t(lang, "students")}</TabsTrigger>
+            <TabsTrigger data-testid="tab-teachers" value="teachers" className="gap-2 h-10 justify-center"><UserSquare2 className="h-4 w-4" />{t(lang, "teachers")}</TabsTrigger>
+            <TabsTrigger data-testid="tab-modules" value="modules" className="gap-2 h-10 justify-center"><LayoutGrid className="h-4 w-4" />{t(lang, "modules")}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="mt-6"><Overview /></TabsContent>
