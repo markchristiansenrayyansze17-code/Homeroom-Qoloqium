@@ -12,7 +12,7 @@ import { Textarea } from "../components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "../components/ui/dialog";
 import { Badge } from "../components/ui/badge";
 import { toast } from "sonner";
-import { Lock, CheckCircle2, Clock, AlertTriangle, Pencil, Trash2, Send, ArrowLeft, Filter } from "lucide-react";
+import { Lock, CheckCircle2, Clock, AlertTriangle, Pencil, Trash2, Send, ArrowLeft, Filter, Plus, X } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 
 const FORMS = ["Form 1", "Form 2", "Form 3", "Form 4", "Form 5"];
@@ -127,7 +127,7 @@ export default function ModuleMaster() {
                     {rep && (
                       <>
                         <Button variant="outline" size="sm" data-testid={`edit-report-${rep.id}`}
-                                onClick={() => setEditReport(rep)}><Pencil className="h-4 w-4 mr-1" />{t(lang, "edit")}</Button>
+                                onClick={() => setEditReport({ report: rep, module: m })}><Pencil className="h-4 w-4 mr-1" />{t(lang, "edit")}</Button>
                         <Button variant="outline" size="sm" data-testid={`delete-report-${rep.id}`}
                                 onClick={async () => {
                                   if (!window.confirm("Delete?")) return;
@@ -169,7 +169,8 @@ export default function ModuleMaster() {
       )}
       {editReport && (
         <ReportDialog
-          report={editReport}
+          module={editReport.module}
+          report={editReport.report}
           onClose={() => setEditReport(null)}
           onSaved={() => { setEditReport(null); load(); }}
         />
@@ -188,22 +189,29 @@ export default function ModuleMaster() {
 function ReportDialog({ module, report, onClose, onSaved }) {
   const { lang } = useAuth();
   const isEdit = !!report;
+  const mod = module || report?.module || {};
+  const fields = mod.custom_fields || [];
   const [meeting, setMeeting] = useState(report?.meeting_report || "");
   const [date, setDate] = useState(report?.date || new Date().toISOString().slice(0, 10));
   const [desc, setDesc] = useState(report?.description || "");
   const [hr, setHr] = useState(report?.hr_upload || "");
   const [hrName, setHrName] = useState(report?.hr_upload_name || "");
   const [att, setAtt] = useState(report?.attendance_image || "");
+  const [customValues, setCustomValues] = useState(report?.custom_values || {});
   const [busy, setBusy] = useState(false);
+
+  const setCv = (label, v) => setCustomValues(prev => ({ ...prev, [label]: v }));
 
   const submit = async () => {
     setBusy(true);
     try {
-      const body = { meeting_report: meeting, date, description: desc, hr_upload: hr || null, hr_upload_name: hrName || null, attendance_image: att || null };
+      const body = { meeting_report: meeting, date, description: desc, hr_upload: hr || null,
+                     hr_upload_name: hrName || null, attendance_image: att || null,
+                     custom_values: customValues };
       if (isEdit) {
         await http.put(`/reports/${report.id}`, body);
       } else {
-        await http.post("/reports", { module_id: module.id, ...body });
+        await http.post("/reports", { module_id: mod.id, ...body });
       }
       toast.success(t(lang, "saved"));
       onSaved();
@@ -216,8 +224,11 @@ function ReportDialog({ module, report, onClose, onSaved }) {
     <Dialog open onOpenChange={onClose}>
       <DialogContent className="max-w-lg max-h-[92vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="font-heading text-2xl">{module?.title || t(lang, "edit")}</DialogTitle>
+          <DialogTitle className="font-heading text-2xl">{mod?.title || t(lang, "edit")}</DialogTitle>
         </DialogHeader>
+        {mod?.image && (
+          <img src={mod.image} alt="" className="w-full max-h-40 object-cover rounded-md border" />
+        )}
         <div className="space-y-4">
           <div>
             <Label>{t(lang, "meeting_report")} *</Label>
@@ -231,6 +242,30 @@ function ReportDialog({ module, report, onClose, onSaved }) {
             <Label>{t(lang, "description")}</Label>
             <Textarea data-testid="report-desc-input" value={desc} onChange={e => setDesc(e.target.value)} rows={2} />
           </div>
+
+          {fields.length > 0 && (
+            <div className="rounded-lg border border-indigo-100 bg-indigo-50/30 p-3 space-y-3">
+              <p className="text-xs font-heading font-bold uppercase tracking-widest text-indigo-700">
+                {t(lang, "template")} · {t(lang, "custom_fields")}
+              </p>
+              {fields.map((cf, i) => (
+                <div key={i}>
+                  <Label>{cf.label}</Label>
+                  {cf.type === "long_text" ? (
+                    <Textarea data-testid={`cf-input-${i}`} rows={2}
+                              value={customValues[cf.label] || ""}
+                              onChange={e => setCv(cf.label, e.target.value)} />
+                  ) : (
+                    <Input data-testid={`cf-input-${i}`}
+                           type={cf.type === "number" ? "number" : cf.type === "date" ? "date" : "text"}
+                           value={customValues[cf.label] || ""}
+                           onChange={e => setCv(cf.label, e.target.value)} />
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
           <div>
             <Label>{t(lang, "hr_upload")}</Label>
             <Input data-testid="report-hr-input" type="file" onChange={async e => {
@@ -267,11 +302,18 @@ function ModuleDialog({ module, onClose, onSaved }) {
   const [image, setImage] = useState(module?.image || "");
   const [startAt, setStartAt] = useState(module?.start_at ? module.start_at.slice(0, 16) : "");
   const [deadline, setDeadline] = useState(module?.deadline_at ? module.deadline_at.slice(0, 16) : "");
+  const [fields, setFields] = useState(module?.custom_fields || []);
+
+  const addField = () => setFields([...fields, { label: "", type: "text" }]);
+  const updField = (i, k, v) => setFields(fields.map((f, idx) => idx === i ? { ...f, [k]: v } : f));
+  const rmField = (i) => setFields(fields.filter((_, idx) => idx !== i));
 
   const save = async () => {
     try {
+      const clean = fields.filter(f => f.label.trim());
       const body = { title, description: desc, form, image: image || null,
-        start_at: new Date(startAt).toISOString(), deadline_at: new Date(deadline).toISOString() };
+        start_at: new Date(startAt).toISOString(), deadline_at: new Date(deadline).toISOString(),
+        custom_fields: clean };
       if (isEdit) await http.put(`/modules/${module.id}`, body);
       else await http.post("/modules", body);
       toast.success(t(lang, "saved"));
@@ -301,11 +343,44 @@ function ModuleDialog({ module, onClose, onSaved }) {
             <div><Label>{t(lang, "deadline_at")} *</Label>
               <Input data-testid="mod-deadline-input" type="datetime-local" value={deadline} onChange={e => setDeadline(e.target.value)} /></div>
           </div>
-          <div><Label>Image</Label>
+          <div><Label>{t(lang, "template")} Image</Label>
             <Input type="file" accept="image/*" onChange={async e => {
               const f = e.target.files?.[0]; if (!f) return; setImage(await fileToBase64(f));
             }} />
             {image && <img src={image} alt="" className="mt-2 h-24 rounded-md border" />}
+          </div>
+
+          {/* Custom fields (template columns) */}
+          <div className="rounded-lg border border-indigo-100 bg-indigo-50/30 p-3">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-xs font-heading font-bold uppercase tracking-widest text-indigo-700">
+                {t(lang, "custom_fields")}
+              </p>
+              <Button size="sm" variant="outline" data-testid="add-cf-btn" onClick={addField} className="gap-1 h-8">
+                <Plus className="h-3.5 w-3.5" /> {t(lang, "add_field")}
+              </Button>
+            </div>
+            {fields.length === 0 && <p className="text-xs text-neutral-500 py-2">No template columns yet.</p>}
+            <div className="space-y-2">
+              {fields.map((f, i) => (
+                <div key={i} className="flex gap-2 items-center">
+                  <Input data-testid={`cf-label-${i}`} placeholder={t(lang, "field_label")}
+                         value={f.label} onChange={e => updField(i, "label", e.target.value)} className="flex-1" />
+                  <Select value={f.type} onValueChange={v => updField(i, "type", v)}>
+                    <SelectTrigger data-testid={`cf-type-${i}`} className="w-32"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="text">{t(lang, "text")}</SelectItem>
+                      <SelectItem value="long_text">{t(lang, "long_text")}</SelectItem>
+                      <SelectItem value="number">{t(lang, "number")}</SelectItem>
+                      <SelectItem value="date">{t(lang, "date")}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Button size="icon" variant="ghost" data-testid={`cf-rm-${i}`} onClick={() => rmField(i)}>
+                    <X className="h-4 w-4 text-red-600" />
+                  </Button>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
         <DialogFooter>

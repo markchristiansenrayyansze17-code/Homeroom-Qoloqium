@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../lib/auth";
 import { t } from "../lib/i18n";
 import { AppHeader } from "../components/AppHeader";
-import { BookOpenCheck, Trophy, GraduationCap, ClipboardList, ArrowUpRight } from "lucide-react";
+import { BookOpenCheck, Trophy, GraduationCap, ClipboardList, ArrowUpRight, Image as ImageIcon, Library } from "lucide-react";
 
 /**
  * Each tile has its own vibrant palette to lift the mood without breaking brand.
@@ -134,6 +134,24 @@ export default function Dashboard() {
             </button>
           </div>
         )}
+
+        {/* Quick nav pills for Gallery + Library */}
+        <div className="mt-8 flex flex-wrap gap-3">
+          <button
+            data-testid="quicknav-library"
+            onClick={() => nav("/module-library")}
+            className="inline-flex items-center gap-2 h-11 px-5 rounded-full bg-white border-2 border-neutral-200 hover:border-indigo-400 text-sm font-semibold text-neutral-800 transition shadow-sm"
+          >
+            <Library className="h-4 w-4 text-indigo-600" /> {t(lang, "module_library")}
+          </button>
+          <button
+            data-testid="quicknav-gallery"
+            onClick={() => nav("/gallery")}
+            className="inline-flex items-center gap-2 h-11 px-5 rounded-full bg-white border-2 border-neutral-200 hover:border-rose-400 text-sm font-semibold text-neutral-800 transition shadow-sm"
+          >
+            <ImageIcon className="h-4 w-4 text-rose-600" /> {t(lang, "gallery")}
+          </button>
+        </div>
 
         <p className="mt-16 text-center text-[10px] uppercase tracking-[0.35em] text-neutral-400">
           <span className="font-heading font-bold text-[#1E3A5F]">{t(lang, "school_motto")}</span>

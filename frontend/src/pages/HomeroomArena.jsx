@@ -7,7 +7,7 @@ import { t } from "../lib/i18n";
 import { Card } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
-import { ArrowLeft, ClipboardList, FileDown, ImageIcon } from "lucide-react";
+import { ArrowLeft, ClipboardList, FileDown, ImageIcon, Printer } from "lucide-react";
 
 const FORMS = ["Form 1", "Form 2", "Form 3", "Form 4", "Form 5"];
 
@@ -96,7 +96,17 @@ export default function HomeroomArena() {
               </p>
               {r.meeting_report && <p className="mt-3 text-sm">{r.meeting_report}</p>}
               {r.description && <p className="mt-2 text-sm text-neutral-600 italic">{r.description}</p>}
-              <div className="mt-3 flex flex-wrap gap-3">
+              {r.custom_values && Object.keys(r.custom_values).length > 0 && (
+                <div className="mt-3 grid gap-1 rounded-lg border border-indigo-100 bg-indigo-50/40 p-3">
+                  {Object.entries(r.custom_values).map(([k, v]) => (
+                    <div key={k} className="grid grid-cols-3 gap-2 text-xs">
+                      <span className="font-semibold text-indigo-700">{k}</span>
+                      <span className="col-span-2 text-neutral-700">{v || "—"}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div className="mt-3 flex flex-wrap gap-3 items-center">
                 {r.attendance_image && (
                   <a href={r.attendance_image} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs text-[#1E3A5F] hover:underline">
                     <ImageIcon className="h-3.5 w-3.5" /> {t(lang, "attendance_image")}
@@ -107,6 +117,14 @@ export default function HomeroomArena() {
                     <FileDown className="h-3.5 w-3.5" /> {r.hr_upload_name || "HR file"}
                   </a>
                 )}
+                <button
+                  data-testid={`print-report-${r.id}`}
+                  onClick={() => window.open(`/report/${r.id}/print`, "_blank")}
+                  className="ml-auto inline-flex items-center gap-1.5 text-xs font-semibold h-8 px-3 rounded-full text-white shadow-sm hover:opacity-95 transition"
+                  style={{background:"linear-gradient(135deg,#1E3A5F 0%,#4F46E5 100%)"}}
+                >
+                  <Printer className="h-3.5 w-3.5" /> {t(lang, "print_pdf")}
+                </button>
               </div>
               {r.attendance_image && (
                 <img src={r.attendance_image} alt="" className="mt-3 max-h-40 rounded-md border" />

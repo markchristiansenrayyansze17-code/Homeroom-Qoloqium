@@ -104,6 +104,7 @@ class Module(BaseModel):
     form: str  # Form 1..Form 5 (module is per batch)
     start_at: str  # ISO datetime
     deadline_at: str
+    custom_fields: List[dict] = Field(default_factory=list)  # [{label, type}]
     created_at: str = Field(default_factory=now_iso)
 
 class ModuleIn(BaseModel):
@@ -113,6 +114,7 @@ class ModuleIn(BaseModel):
     form: str
     start_at: str
     deadline_at: str
+    custom_fields: List[dict] = []
 
 class Report(BaseModel):
     id: str = Field(default_factory=new_id)
@@ -128,6 +130,7 @@ class Report(BaseModel):
     hr_upload_name: Optional[str] = None
     description: str = ""
     attendance_image: Optional[str] = None  # base64
+    custom_values: dict = Field(default_factory=dict)
     created_at: str = Field(default_factory=now_iso)
     updated_at: str = Field(default_factory=now_iso)
 
@@ -139,6 +142,7 @@ class ReportIn(BaseModel):
     hr_upload_name: Optional[str] = None
     description: str = ""
     attendance_image: Optional[str] = None
+    custom_values: dict = {}
 
 class ReportUpdate(BaseModel):
     meeting_report: Optional[str] = None
@@ -147,6 +151,7 @@ class ReportUpdate(BaseModel):
     hr_upload_name: Optional[str] = None
     description: Optional[str] = None
     attendance_image: Optional[str] = None
+    custom_values: Optional[dict] = None
 
 class COTWEntry(BaseModel):
     rank: int
@@ -315,13 +320,16 @@ async def delete_student(sid: str, _: dict = Depends(require_admin)):
 
 # --------- Modules ---------
 @api.get("/modules")
-async def list_modules(form: Optional[str] = None, user: dict = Depends(current_user)):
+async def list_modules(form: Optional[str] = None, all: Optional[bool] = False,
+                       user: dict = Depends(current_user)):
     q = {}
-    if form:
+    if all:
+        pass  # library view — return everything
+    elif form:
         q["form"] = form
     elif user.get("role") in ("student", "teacher"):
         q["form"] = user.get("form")
-    items = await db.modules.find(q, {"_id": 0}).sort("start_at", 1).to_list(500)
+    items = await db.modules.find(q, {"_id": 0}).sort("start_at", 1).to_list(1000)
     return items
 
 @api.post("/modules")
@@ -401,6 +409,7 @@ async def create_report(body: ReportIn, user: dict = Depends(current_user)):
         hr_upload_name=body.hr_upload_name,
         description=body.description,
         attendance_image=body.attendance_image,
+        custom_values=body.custom_values or {},
     )
     await db.reports.insert_one(r.model_dump())
     return r.model_dump()
@@ -503,6 +512,48 @@ async def stats_overview(_: dict = Depends(require_admin)):
 async def homerooms(user: dict = Depends(current_user)):
     teachers = await db.teachers.find({}, {"_id": 0}).to_list(500)
     return [{"form": t["form"], "homeroom": t["homeroom"], "teacher": t["name"]} for t in teachers]
+
+@api.get("/gallery")
+async def gallery(homeroom: Optional[str] = None, form: Optional[str] = None,
+                  user: dict = Depends(current_user)):
+    q = {"attendance_image": {"$ne": None}}
+    if user.get("role") in ("student", "teacher"):
+        q["homeroom"] = user["homeroom"]
+    else:
+        if homeroom:
+            q["homeroom"] = homeroom
+        if form:
+            q["form"] = form
+    reports = await db.reports.find(q, {"_id": 0}).sort("created_at", -1).to_list(2000)
+    modules = await db.modules.find({}, {"_id": 0, "id": 1, "title": 1}).to_list(2000)
+    mmap = {m["id"]: m["title"] for m in modules}
+    out = []
+    for r in reports:
+        if not r.get("attendance_image"):
+            continue
+        out.append({
+            "report_id": r["id"],
+            "module_id": r["module_id"],
+            "module_title": mmap.get(r["module_id"], "—"),
+            "homeroom": r["homeroom"],
+            "form": r["form"],
+            "image": r["attendance_image"],
+            "date": r.get("date"),
+            "submitted_by_name": r.get("submitted_by_name"),
+            "created_at": r["created_at"],
+        })
+    return out
+
+@api.get("/reports/{rid}/full")
+async def report_full(rid: str, user: dict = Depends(current_user)):
+    """Full report + module info for print/PDF view."""
+    r = await db.reports.find_one({"id": rid}, {"_id": 0})
+    if not r:
+        raise HTTPException(404, "Not found")
+    if user.get("role") in ("student", "teacher") and r["homeroom"] != user.get("homeroom"):
+        raise HTTPException(403, "Not your homeroom")
+    m = await db.modules.find_one({"id": r["module_id"]}, {"_id": 0}) or {}
+    return {"report": r, "module": m}
 
 @api.get("/")
 async def root():
