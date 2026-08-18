@@ -208,6 +208,12 @@ async def require_admin(user: dict = Depends(current_user)) -> dict:
         raise HTTPException(403, "Admin only")
     return user
 
+async def require_editor(user: dict = Depends(current_user)) -> dict:
+    """Admin OR teacher can edit shared content (Edustation, etc.)"""
+    if user.get("role") not in ("admin", "teacher"):
+        raise HTTPException(403, "Admin or teacher only")
+    return user
+
 # --------- Seed on startup ---------
 @app.on_event("startup")
 async def seed():
@@ -462,20 +468,20 @@ async def list_subjects(form: Optional[str] = None, user: dict = Depends(current
     return items
 
 @api.post("/subjects")
-async def create_subject(body: SubjectIn, _: dict = Depends(require_admin)):
+async def create_subject(body: SubjectIn, _: dict = Depends(require_editor)):
     s = Subject(**body.model_dump())
     await db.subjects.insert_one(s.model_dump())
     return s.model_dump()
 
 @api.put("/subjects/{sid}")
-async def update_subject(sid: str, body: SubjectIn, _: dict = Depends(require_admin)):
+async def update_subject(sid: str, body: SubjectIn, _: dict = Depends(require_editor)):
     r = await db.subjects.update_one({"id": sid}, {"$set": body.model_dump()})
     if r.matched_count == 0:
         raise HTTPException(404, "Not found")
     return {"ok": True}
 
 @api.delete("/subjects/{sid}")
-async def delete_subject(sid: str, _: dict = Depends(require_admin)):
+async def delete_subject(sid: str, _: dict = Depends(require_editor)):
     await db.subjects.delete_one({"id": sid})
     return {"ok": True}
 

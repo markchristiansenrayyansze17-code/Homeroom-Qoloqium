@@ -18,7 +18,7 @@ const FORMS = ["Form 1", "Form 2", "Form 3", "Form 4", "Form 5"];
 export default function Edustation() {
   const { user, lang } = useAuth();
   const nav = useNavigate();
-  const isAdmin = user?.role === "admin";
+  const canEdit = user?.role === "admin" || user?.role === "teacher";
   const [form, setForm] = useState(user?.form || "Form 1");
   const [subjects, setSubjects] = useState([]);
   const [openDlg, setOpenDlg] = useState(null);
@@ -57,7 +57,7 @@ export default function Edustation() {
               <SelectTrigger data-testid="edu-form-select" className="w-40 h-10"><SelectValue /></SelectTrigger>
               <SelectContent>{FORMS.map(f => <SelectItem key={f} value={f}>{f}</SelectItem>)}</SelectContent>
             </Select>
-            {isAdmin && (
+            {canEdit && (
               <Button data-testid="add-subject-btn" onClick={() => setOpenDlg({})}
                       className="bg-[#1E3A5F] hover:bg-[#152A45] gap-2">
                 <Plus className="h-4 w-4" /> {t(lang, "subject")}
@@ -83,7 +83,7 @@ export default function Edustation() {
                     <p className="text-sm text-neutral-600 mt-0.5">{s.teacher || "-"}</p>
                   </div>
                 </div>
-                {isAdmin && (
+                {canEdit && (
                   <div className="flex gap-1">
                     <Button size="icon" variant="ghost" data-testid={`edit-subj-${s.id}`} onClick={() => setOpenDlg(s)}>
                       <Pencil className="h-4 w-4" />
