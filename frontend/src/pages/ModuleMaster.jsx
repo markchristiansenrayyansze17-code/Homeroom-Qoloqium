@@ -4,6 +4,7 @@ import { AppHeader } from "../components/AppHeader";
 import { useAuth } from "../lib/auth";
 import { http, fileToBase64 } from "../lib/api";
 import { t } from "../lib/i18n";
+import { STANDARD_TEMPLATE, hydrateTemplate, TEMPLATE_IMAGE } from "../lib/reportTemplate";
 import { Card } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -190,24 +191,43 @@ function ReportDialog({ module, report, onClose, onSaved }) {
   const { lang } = useAuth();
   const isEdit = !!report;
   const mod = module || report?.module || {};
-  const fields = mod.custom_fields || [];
-  const [meeting, setMeeting] = useState(report?.meeting_report || "");
-  const [date, setDate] = useState(report?.date || new Date().toISOString().slice(0, 10));
-  const [desc, setDesc] = useState(report?.description || "");
+  const extraFields = mod.custom_fields || [];
+
+  // Standard template values
+  const initial = hydrateTemplate(report);
+  const [tpl, setTpl] = useState(initial);
+  const setT = (k, v) => setTpl(prev => ({ ...prev, [k]: v }));
+
+  // Extra custom fields go into a separate map
+  const [extraValues, setExtraValues] = useState(() => {
+    const cv = report?.custom_values || {};
+    const tplKeys = STANDARD_TEMPLATE.map(f => f.key);
+    return Object.fromEntries(Object.entries(cv).filter(([k]) => !tplKeys.includes(k)));
+  });
+  const setEv = (label, v) => setExtraValues(prev => ({ ...prev, [label]: v }));
+
   const [hr, setHr] = useState(report?.hr_upload || "");
   const [hrName, setHrName] = useState(report?.hr_upload_name || "");
   const [att, setAtt] = useState(report?.attendance_image || "");
-  const [customValues, setCustomValues] = useState(report?.custom_values || {});
   const [busy, setBusy] = useState(false);
 
-  const setCv = (label, v) => setCustomValues(prev => ({ ...prev, [label]: v }));
-
   const submit = async () => {
+    if (!tpl.minit_laporan?.trim() || !tpl.tarikh) {
+      toast.error("Tarikh & Minit Laporan wajib diisi");
+      return;
+    }
     setBusy(true);
     try {
-      const body = { meeting_report: meeting, date, description: desc, hr_upload: hr || null,
-                     hr_upload_name: hrName || null, attendance_image: att || null,
-                     custom_values: customValues };
+      const custom_values = { ...tpl, ...extraValues };
+      const body = {
+        meeting_report: tpl.minit_laporan,
+        date: tpl.tarikh,
+        description: "",
+        hr_upload: hr || null,
+        hr_upload_name: hrName || null,
+        attendance_image: att || null,
+        custom_values,
+      };
       if (isEdit) {
         await http.put(`/reports/${report.id}`, body);
       } else {
@@ -222,50 +242,101 @@ function ReportDialog({ module, report, onClose, onSaved }) {
 
   return (
     <Dialog open onOpenChange={onClose}>
-      <DialogContent className="max-w-lg max-h-[92vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl max-h-[92vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-heading text-2xl">{mod?.title || t(lang, "edit")}</DialogTitle>
         </DialogHeader>
-        {mod?.image && (
-          <img src={mod.image} alt="" className="w-full max-h-40 object-cover rounded-md border" />
-        )}
-        <div className="space-y-4">
-          <div>
-            <Label>{t(lang, "meeting_report")} *</Label>
-            <Textarea data-testid="report-meeting-input" value={meeting} onChange={e => setMeeting(e.target.value)} rows={3} />
+
+        {/* Template preview */}
+        <div className="rounded-lg overflow-hidden border-2 border-[#1E3A5F]/20">
+          <div className="bg-[#1E3A5F] text-white px-4 py-2 flex items-center justify-between">
+            <p className="text-xs font-heading font-bold uppercase tracking-[0.2em]">Template Rasmi</p>
+            <span className="text-[10px] text-white/70">LAPORAN PERJUMPAAN RASMI HOMEROOM</span>
           </div>
-          <div>
-            <Label>{t(lang, "date")} *</Label>
-            <Input data-testid="report-date-input" type="date" value={date} onChange={e => setDate(e.target.value)} />
-          </div>
-          <div>
-            <Label>{t(lang, "description")}</Label>
-            <Textarea data-testid="report-desc-input" value={desc} onChange={e => setDesc(e.target.value)} rows={2} />
+          <img src={TEMPLATE_IMAGE} alt="Template" className="w-full max-h-56 object-contain bg-white" />
+        </div>
+
+        {/* Standard template fields — grouped like the template layout */}
+        <div className="mt-4 rounded-xl border border-[#FFC72C]/60 bg-[#FFFDF6] p-4 space-y-3">
+          <p className="text-[11px] font-heading font-bold uppercase tracking-[0.22em] text-[#B45309]">
+            Sila lengkapkan borang laporan
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {STANDARD_TEMPLATE.slice(0, 5).map(f => (
+              <div key={f.key} className={f.key === "kehadiran_phr" ? "sm:col-span-2" : ""}>
+                <Label className="text-[11px] font-bold text-[#1E3A5F] tracking-wider">{f.label}</Label>
+                <Input
+                  data-testid={`tpl-${f.key}`}
+                  type={f.type === "date" ? "date" : f.type === "time" ? "time" : "text"}
+                  value={tpl[f.key]}
+                  onChange={e => setT(f.key, e.target.value)}
+                  placeholder={f.hint || ""}
+                  className="h-9"
+                />
+              </div>
+            ))}
           </div>
 
-          {fields.length > 0 && (
-            <div className="rounded-lg border border-indigo-100 bg-indigo-50/30 p-3 space-y-3">
-              <p className="text-xs font-heading font-bold uppercase tracking-widest text-indigo-700">
-                {t(lang, "template")} · {t(lang, "custom_fields")}
-              </p>
-              {fields.map((cf, i) => (
-                <div key={i}>
-                  <Label>{cf.label}</Label>
-                  {cf.type === "long_text" ? (
-                    <Textarea data-testid={`cf-input-${i}`} rows={2}
-                              value={customValues[cf.label] || ""}
-                              onChange={e => setCv(cf.label, e.target.value)} />
-                  ) : (
-                    <Input data-testid={`cf-input-${i}`}
-                           type={cf.type === "number" ? "number" : cf.type === "date" ? "date" : "text"}
-                           value={customValues[cf.label] || ""}
-                           onChange={e => setCv(cf.label, e.target.value)} />
-                  )}
-                </div>
-              ))}
+          <div>
+            <Label className="text-[11px] font-bold text-[#1E3A5F] tracking-wider">
+              MINIT LAPORAN PERTEMUAN <span className="text-neutral-500 font-normal">(laporan lengkap 80-100 perkataan)</span>
+            </Label>
+            <Textarea
+              data-testid="tpl-minit_laporan"
+              rows={6}
+              value={tpl.minit_laporan}
+              onChange={e => setT("minit_laporan", e.target.value)}
+              className="font-serif text-[13px] leading-relaxed"
+            />
+            <p className="mt-1 text-[10px] text-neutral-500 text-right">
+              {tpl.minit_laporan.trim().split(/\s+/).filter(Boolean).length} perkataan
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-[#FFC72C]/40 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-600">Disediakan Oleh</p>
+              <Input data-testid="tpl-disediakan_oleh" placeholder="Nama Setiausaha HR"
+                     value={tpl.disediakan_oleh} onChange={e => setT("disediakan_oleh", e.target.value)} className="h-9" />
+              <Input data-testid="tpl-disediakan_tarikh" type="date"
+                     value={tpl.disediakan_tarikh} onChange={e => setT("disediakan_tarikh", e.target.value)} className="h-9" />
             </div>
-          )}
+            <div className="space-y-2">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-600">Disemak Oleh</p>
+              <Input data-testid="tpl-disemak_oleh" placeholder="Nama Penasihat Homeroom"
+                     value={tpl.disemak_oleh} onChange={e => setT("disemak_oleh", e.target.value)} className="h-9" />
+              <Input data-testid="tpl-disemak_tarikh" type="date"
+                     value={tpl.disemak_tarikh} onChange={e => setT("disemak_tarikh", e.target.value)} className="h-9" />
+            </div>
+          </div>
+        </div>
 
+        {/* Admin-defined extra columns (if any) */}
+        {extraFields.length > 0 && (
+          <div className="mt-4 rounded-lg border border-indigo-100 bg-indigo-50/30 p-3 space-y-3">
+            <p className="text-xs font-heading font-bold uppercase tracking-widest text-indigo-700">
+              Ruangan Tambahan
+            </p>
+            {extraFields.map((cf, i) => (
+              <div key={i}>
+                <Label>{cf.label}</Label>
+                {cf.type === "long_text" ? (
+                  <Textarea data-testid={`cf-input-${i}`} rows={2}
+                            value={extraValues[cf.label] || ""}
+                            onChange={e => setEv(cf.label, e.target.value)} />
+                ) : (
+                  <Input data-testid={`cf-input-${i}`}
+                         type={cf.type === "number" ? "number" : cf.type === "date" ? "date" : "text"}
+                         value={extraValues[cf.label] || ""}
+                         onChange={e => setEv(cf.label, e.target.value)} />
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <Label>{t(lang, "hr_upload")}</Label>
             <Input data-testid="report-hr-input" type="file" onChange={async e => {
@@ -280,12 +351,13 @@ function ReportDialog({ module, report, onClose, onSaved }) {
               const f = e.target.files?.[0]; if (!f) return;
               setAtt(await fileToBase64(f));
             }} />
-            {att && <img src={att} alt="" className="mt-2 h-24 rounded-md border" />}
+            {att && <img src={att} alt="" className="mt-2 h-20 rounded-md border" />}
           </div>
         </div>
+
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>{t(lang, "cancel")}</Button>
-          <Button data-testid="report-save-btn" onClick={submit} disabled={busy || !meeting.trim()}
+          <Button data-testid="report-save-btn" onClick={submit} disabled={busy}
                   className="bg-[#1E3A5F] hover:bg-[#152A45]">{t(lang, "save")}</Button>
         </DialogFooter>
       </DialogContent>
@@ -353,9 +425,12 @@ function ModuleDialog({ module, onClose, onSaved }) {
           {/* Custom fields (template columns) */}
           <div className="rounded-lg border border-indigo-100 bg-indigo-50/30 p-3">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-xs font-heading font-bold uppercase tracking-widest text-indigo-700">
-                {t(lang, "custom_fields")}
-              </p>
+              <div>
+                <p className="text-xs font-heading font-bold uppercase tracking-widest text-indigo-700">
+                  Ruangan Tambahan
+                </p>
+                <p className="text-[10px] text-neutral-500 mt-0.5">Templat rasmi sudah termasuk (Tarikh, Tempat, Masa, Kehadiran, PHR, Minit Laporan, Disediakan/Disemak). Tambah ruangan tambahan di sini jika perlu.</p>
+              </div>
               <Button size="sm" variant="outline" data-testid="add-cf-btn" onClick={addField} className="gap-1 h-8">
                 <Plus className="h-3.5 w-3.5" /> {t(lang, "add_field")}
               </Button>
