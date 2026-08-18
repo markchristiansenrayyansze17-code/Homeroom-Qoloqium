@@ -44,13 +44,13 @@ export default function HomeroomArena() {
       <AppHeader />
       <main className="max-w-6xl mx-auto px-4 md:px-8 py-10">
         <button onClick={() => nav("/dashboard")}
-                className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-[#1E3A5F]">
+                className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-[#B91C1C]">
           <ArrowLeft className="h-4 w-4" /> {t(lang, "back")}
         </button>
 
         <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.22em] text-[#1E3A5F] font-semibold">04 · History</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-[#B91C1C] font-semibold">04 · History</p>
             <h1 className="mt-2 font-heading text-4xl md:text-5xl font-extrabold flex items-center gap-3">
               <ClipboardList className="h-10 w-10" /> {t(lang, "homeroom_arena")}
             </h1>
@@ -84,7 +84,7 @@ export default function HomeroomArena() {
             <Card key={r.id} data-testid={`arena-report-${r.id}`}
                   className="p-6 border-neutral-200">
               <div className="flex flex-wrap items-center gap-2">
-                <Badge variant="outline" className="border-[#1E3A5F]/40 text-[#1E3A5F]">{r.form}</Badge>
+                <Badge variant="outline" className="border-[#B91C1C]/40 text-[#B91C1C]">{r.form}</Badge>
                 <Badge variant="outline">{r.homeroom}</Badge>
                 <span className="text-xs text-neutral-500 ml-auto">
                   {new Date(r.created_at).toLocaleString()}
@@ -108,12 +108,12 @@ export default function HomeroomArena() {
               )}
               <div className="mt-3 flex flex-wrap gap-3 items-center">
                 {r.attendance_image && (
-                  <a href={r.attendance_image} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs text-[#1E3A5F] hover:underline">
+                  <a href={r.attendance_image} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs text-[#B91C1C] hover:underline">
                     <ImageIcon className="h-3.5 w-3.5" /> {t(lang, "attendance_image")}
                   </a>
                 )}
                 {r.hr_upload && (
-                  <a href={r.hr_upload} download={r.hr_upload_name || "hr_upload"} className="inline-flex items-center gap-1 text-xs text-[#1E3A5F] hover:underline">
+                  <a href={r.hr_upload} download={r.hr_upload_name || "hr_upload"} className="inline-flex items-center gap-1 text-xs text-[#B91C1C] hover:underline">
                     <FileDown className="h-3.5 w-3.5" /> {r.hr_upload_name || "HR file"}
                   </a>
                 )}
@@ -121,7 +121,7 @@ export default function HomeroomArena() {
                   data-testid={`print-report-${r.id}`}
                   onClick={() => window.open(`/report/${r.id}/print`, "_blank")}
                   className="ml-auto inline-flex items-center gap-1.5 text-xs font-semibold h-8 px-3 rounded-full text-white shadow-sm hover:opacity-95 transition"
-                  style={{background:"linear-gradient(135deg,#1E3A5F 0%,#4F46E5 100%)"}}
+                  style={{background:"linear-gradient(135deg,#B91C1C 0%,#0D9488 100%)"}}
                 >
                   <Printer className="h-3.5 w-3.5" /> {t(lang, "print_pdf")}
                 </button>

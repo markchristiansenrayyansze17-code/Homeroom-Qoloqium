@@ -41,13 +41,13 @@ export default function Edustation() {
       <AppHeader />
       <main className="max-w-6xl mx-auto px-4 md:px-8 py-10">
         <button onClick={() => nav("/dashboard")}
-                className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-[#1E3A5F]">
+                className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-[#B91C1C]">
           <ArrowLeft className="h-4 w-4" /> {t(lang, "back")}
         </button>
 
         <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.22em] text-[#1E3A5F] font-semibold">03 · Academic</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-[#B91C1C] font-semibold">03 · Academic</p>
             <h1 className="mt-2 font-heading text-4xl md:text-5xl font-extrabold flex items-center gap-3">
               <GraduationCap className="h-10 w-10" /> {t(lang, "edustation")}
             </h1>
@@ -59,7 +59,7 @@ export default function Edustation() {
             </Select>
             {canEdit && (
               <Button data-testid="add-subject-btn" onClick={() => setOpenDlg({})}
-                      className="bg-[#1E3A5F] hover:bg-[#152A45] gap-2">
+                      className="bg-[#B91C1C] hover:bg-[#7F1D1D] gap-2">
                 <Plus className="h-4 w-4" /> {t(lang, "subject")}
               </Button>
             )}
@@ -72,11 +72,11 @@ export default function Edustation() {
           )}
           {subjects.map(s => (
             <Card key={s.id} data-testid={`subject-card-${s.id}`}
-                  className="p-6 border-neutral-200 hover:border-[#1E3A5F]/40 transition-colors">
+                  className="p-6 border-neutral-200 hover:border-[#B91C1C]/40 transition-colors">
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-3">
-                  <div className="h-11 w-11 rounded-lg bg-[#1E3A5F]/10 flex items-center justify-center">
-                    <BookOpen className="h-5 w-5 text-[#1E3A5F]" />
+                  <div className="h-11 w-11 rounded-lg bg-[#B91C1C]/10 flex items-center justify-center">
+                    <BookOpen className="h-5 w-5 text-[#B91C1C]" />
                   </div>
                   <div>
                     <h3 className="font-heading text-xl font-bold">{s.name}</h3>
@@ -97,7 +97,7 @@ export default function Edustation() {
               <div className="mt-4 grid gap-2 text-sm">
                 {s.link && (
                   <a data-testid={`subj-link-${s.id}`} href={s.link} target="_blank" rel="noreferrer"
-                     className="inline-flex items-center gap-2 text-[#1E3A5F] hover:underline font-medium">
+                     className="inline-flex items-center gap-2 text-[#B91C1C] hover:underline font-medium">
                     <ExternalLink className="h-3.5 w-3.5" /> {t(lang, "link")}
                   </a>
                 )}
@@ -159,7 +159,7 @@ function SubjectDialog({ subject, currentForm, onClose, onSaved }) {
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>{t(lang, "cancel")}</Button>
           <Button data-testid="subj-save-btn" onClick={save} disabled={!name.trim()}
-                  className="bg-[#1E3A5F] hover:bg-[#152A45]">{t(lang, "save")}</Button>
+                  className="bg-[#B91C1C] hover:bg-[#7F1D1D]">{t(lang, "save")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

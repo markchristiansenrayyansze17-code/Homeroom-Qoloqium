@@ -43,10 +43,10 @@ export default function Login() {
     <div className="min-h-screen grid lg:grid-cols-2">
       {/* LEFT — Brand panel */}
       <div className="relative hidden lg:flex flex-col justify-between p-12 text-white overflow-hidden"
-           style={{background: "linear-gradient(135deg, #1E3A5F 0%, #2E4F82 45%, #4F46E5 100%)"}}>
-        <div className="absolute -right-24 -top-24 w-96 h-96 rounded-full bg-[#FFC72C]/25 blur-3xl" />
-        <div className="absolute -left-16 -bottom-24 w-96 h-96 rounded-full bg-[#22D3EE]/25 blur-3xl" />
-        <div className="absolute right-20 top-40 w-72 h-72 rounded-full bg-[#F472B6]/15 blur-3xl" />
+           style={{background: "linear-gradient(135deg, #B91C1C 0%, #DC2626 40%, #EA580C 100%)"}}>
+        <div className="absolute -right-24 -top-24 w-96 h-96 rounded-full bg-[#F59E0B]/35 blur-3xl" />
+        <div className="absolute -left-16 -bottom-24 w-96 h-96 rounded-full bg-[#0D9488]/30 blur-3xl" />
+        <div className="absolute right-20 top-40 w-72 h-72 rounded-full bg-[#FBBF24]/25 blur-3xl" />
         <div className="relative z-10">
           <img src={LOGO} alt="MRSM Kuching" className="h-24 w-24 drop-shadow-2xl" />
           <p className="mt-8 text-xs uppercase tracking-[0.3em] text-white/70">Maktab Rendah Sains Mara</p>
@@ -92,11 +92,11 @@ export default function Login() {
           <Card className="mt-8 p-6 md:p-8 border-neutral-200/80 shadow-sm">
             <Tabs value={role} onValueChange={(v) => { setRole(v); setIdent(""); }}>
               <TabsList className="grid w-full grid-cols-2 h-11 bg-neutral-100 p-1">
-                <TabsTrigger data-testid="tab-student" value="student" className="gap-2 data-[state=active]:bg-white data-[state=active]:text-[#1E3A5F]">
+                <TabsTrigger data-testid="tab-student" value="student" className="gap-2 data-[state=active]:bg-white data-[state=active]:text-[#B91C1C]">
                   <GraduationCap className="h-4 w-4" />
                   {t(lang, "student")}
                 </TabsTrigger>
-                <TabsTrigger data-testid="tab-teacher" value="teacher" className="gap-2 data-[state=active]:bg-white data-[state=active]:text-[#1E3A5F]">
+                <TabsTrigger data-testid="tab-teacher" value="teacher" className="gap-2 data-[state=active]:bg-white data-[state=active]:text-[#B91C1C]">
                   <UserSquare2 className="h-4 w-4" />
                   {t(lang, "teacher")}
                 </TabsTrigger>
@@ -130,7 +130,7 @@ export default function Login() {
                   data-testid="login-submit-btn"
                   type="submit"
                   disabled={loading || !ident.trim()}
-                  className="w-full h-11 bg-[#1E3A5F] hover:bg-[#152A45] text-white font-semibold text-base"
+                  className="w-full h-11 bg-[#B91C1C] hover:bg-[#7F1D1D] text-white font-semibold text-base"
                 >
                   {loading ? "…" : t(lang, "login")}
                   <ShieldCheck className="ml-2 h-4 w-4" />

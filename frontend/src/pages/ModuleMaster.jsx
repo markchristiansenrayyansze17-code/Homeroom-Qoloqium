@@ -63,13 +63,13 @@ export default function ModuleMaster() {
       <AppHeader />
       <main className="max-w-6xl mx-auto px-4 md:px-8 py-10">
         <button data-testid="back-dashboard-btn" onClick={() => nav("/dashboard")}
-                className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-[#1E3A5F]">
+                className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-[#B91C1C]">
           <ArrowLeft className="h-4 w-4" /> {t(lang, "back")}
         </button>
 
         <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.22em] text-[#1E3A5F] font-semibold">01 · E-Reporting</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-[#B91C1C] font-semibold">01 · E-Reporting</p>
             <h1 className="mt-2 font-heading text-4xl md:text-5xl font-extrabold">{t(lang, "module_master")}</h1>
             <p className="mt-2 text-neutral-600">
               {isAdmin ? t(lang, "manage") : user.homeroom}
@@ -85,7 +85,7 @@ export default function ModuleMaster() {
                 </SelectContent>
               </Select>
               <Button data-testid="admin-add-module-btn" onClick={() => setModOpen({})}
-                      className="bg-[#1E3A5F] hover:bg-[#152A45]">+ {t(lang, "add")} {t(lang, "module")}</Button>
+                      className="bg-[#B91C1C] hover:bg-[#7F1D1D]">+ {t(lang, "add")} {t(lang, "module")}</Button>
             </div>
           )}
         </div>
@@ -121,7 +121,7 @@ export default function ModuleMaster() {
                   <div className="mt-4 flex flex-wrap gap-2">
                     {!isAdmin && !rep && st === "open" && (
                       <Button data-testid={`submit-module-${m.id}`} onClick={() => setSubmitOpen(m)}
-                              className="bg-[#1E3A5F] hover:bg-[#152A45] gap-2">
+                              className="bg-[#B91C1C] hover:bg-[#7F1D1D] gap-2">
                         <Send className="h-4 w-4" /> {t(lang, "submit_report")}
                       </Button>
                     )}
@@ -248,8 +248,8 @@ function ReportDialog({ module, report, onClose, onSaved }) {
         </DialogHeader>
 
         {/* Template preview */}
-        <div className="rounded-lg overflow-hidden border-2 border-[#1E3A5F]/20">
-          <div className="bg-[#1E3A5F] text-white px-4 py-2 flex items-center justify-between">
+        <div className="rounded-lg overflow-hidden border-2 border-[#B91C1C]/20">
+          <div className="bg-[#B91C1C] text-white px-4 py-2 flex items-center justify-between">
             <p className="text-xs font-heading font-bold uppercase tracking-[0.2em]">Template Rasmi</p>
             <span className="text-[10px] text-white/70">LAPORAN PERJUMPAAN RASMI HOMEROOM</span>
           </div>
@@ -265,7 +265,7 @@ function ReportDialog({ module, report, onClose, onSaved }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {STANDARD_TEMPLATE.slice(0, 5).map(f => (
               <div key={f.key} className={f.key === "kehadiran_phr" ? "sm:col-span-2" : ""}>
-                <Label className="text-[11px] font-bold text-[#1E3A5F] tracking-wider">{f.label}</Label>
+                <Label className="text-[11px] font-bold text-[#B91C1C] tracking-wider">{f.label}</Label>
                 <Input
                   data-testid={`tpl-${f.key}`}
                   type={f.type === "date" ? "date" : f.type === "time" ? "time" : "text"}
@@ -279,7 +279,7 @@ function ReportDialog({ module, report, onClose, onSaved }) {
           </div>
 
           <div>
-            <Label className="text-[11px] font-bold text-[#1E3A5F] tracking-wider">
+            <Label className="text-[11px] font-bold text-[#B91C1C] tracking-wider">
               MINIT LAPORAN PERTEMUAN <span className="text-neutral-500 font-normal">(laporan lengkap 80-100 perkataan)</span>
             </Label>
             <Textarea
@@ -358,7 +358,7 @@ function ReportDialog({ module, report, onClose, onSaved }) {
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>{t(lang, "cancel")}</Button>
           <Button data-testid="report-save-btn" onClick={submit} disabled={busy}
-                  className="bg-[#1E3A5F] hover:bg-[#152A45]">{t(lang, "save")}</Button>
+                  className="bg-[#B91C1C] hover:bg-[#7F1D1D]">{t(lang, "save")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -461,7 +461,7 @@ function ModuleDialog({ module, onClose, onSaved }) {
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>{t(lang, "cancel")}</Button>
           <Button data-testid="mod-save-btn" onClick={save} disabled={!title.trim() || !startAt || !deadline}
-                  className="bg-[#1E3A5F] hover:bg-[#152A45]">{t(lang, "save")}</Button>
+                  className="bg-[#B91C1C] hover:bg-[#7F1D1D]">{t(lang, "save")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

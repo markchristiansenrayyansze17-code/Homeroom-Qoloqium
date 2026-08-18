@@ -33,8 +33,8 @@ export default function ReportPrint() {
   const stdKeys = ["tarikh","tempat","masa","kehadiran","kehadiran_phr","minit_laporan","disediakan_oleh","disediakan_tarikh","disemak_oleh","disemak_tarikh"];
   const extras = Object.entries(cv).filter(([k]) => !stdKeys.includes(k));
 
-  const infoCell = { border: "1.5px solid #1E3A5F", padding: "10px 14px", verticalAlign: "middle", fontSize: 14 };
-  const labelCell = { ...infoCell, background: "#FFFFFF", fontWeight: 700, width: "34%", color: "#1E3A5F", letterSpacing: 0.5 };
+  const infoCell = { border: "1.5px solid #B91C1C", padding: "10px 14px", verticalAlign: "middle", fontSize: 14 };
+  const labelCell = { ...infoCell, background: "#FFFFFF", fontWeight: 700, width: "34%", color: "#B91C1C", letterSpacing: 0.5 };
 
   return (
     <div style={{
@@ -57,9 +57,9 @@ export default function ReportPrint() {
       <div style={{
         position: "absolute", right: 0, bottom: 0, width: 180, height: 120, overflow: "hidden", pointerEvents: "none"
       }}>
-        <div style={{ position: "absolute", right: -30, bottom: 20, width: 220, height: 24, background: "#1E3A5F", transform: "rotate(-25deg)", borderRadius: 4 }} />
+        <div style={{ position: "absolute", right: -30, bottom: 20, width: 220, height: 24, background: "#B91C1C", transform: "rotate(-25deg)", borderRadius: 4 }} />
         <div style={{ position: "absolute", right: -50, bottom: 50, width: 220, height: 24, background: "#FFC72C", transform: "rotate(-25deg)", borderRadius: 4 }} />
-        <div style={{ position: "absolute", right: -70, bottom: 80, width: 220, height: 24, background: "#1E3A5F", transform: "rotate(-25deg)", borderRadius: 4 }} />
+        <div style={{ position: "absolute", right: -70, bottom: 80, width: 220, height: 24, background: "#B91C1C", transform: "rotate(-25deg)", borderRadius: 4 }} />
       </div>
 
       {/* TITLE */}
@@ -76,7 +76,7 @@ export default function ReportPrint() {
       <div style={{
         marginTop: 4,
         background: "#FFC72C",
-        color: "#1E3A5F",
+        color: "#B91C1C",
         padding: "6px 14px",
         fontFamily: "'Helvetica Neue', Arial, sans-serif",
         fontWeight: 800,
@@ -90,7 +90,7 @@ export default function ReportPrint() {
       {/* Homeroom + module context row */}
       <div style={{ marginTop: 14, display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12, color: "#374151" }}>
         <div>
-          <strong style={{ color: "#1E3A5F" }}>{r.form}</strong> · {r.homeroom}
+          <strong style={{ color: "#B91C1C" }}>{r.form}</strong> · {r.homeroom}
           {m?.title && <> · <em>{m.title}</em></>}
         </div>
         <img src="/mrsm-logo.png" alt="MRSM" style={{ height: 54, width: 54 }} />
@@ -111,9 +111,9 @@ export default function ReportPrint() {
       <div style={{
         marginTop: 18,
         background: "#DDE3EE",
-        border: "1.5px solid #1E3A5F",
+        border: "1.5px solid #B91C1C",
         padding: "8px 14px",
-        color: "#1E3A5F",
+        color: "#B91C1C",
         fontWeight: 800,
         letterSpacing: 1.2,
         fontFamily: "'Helvetica Neue', Arial, sans-serif",
@@ -164,7 +164,7 @@ export default function ReportPrint() {
       {/* Extra columns if any */}
       {extras.length > 0 && (
         <div style={{ marginTop: 24, pageBreakInside: "avoid" }}>
-          <div style={{ background: "#EEF2FF", border: "1.5px solid #4F46E5", padding: "6px 12px", color: "#4F46E5", fontWeight: 700, letterSpacing: 1, fontFamily: "'Helvetica Neue', Arial, sans-serif", fontSize: 12 }}>
+          <div style={{ background: "#EEF2FF", border: "1.5px solid #0D9488", padding: "6px 12px", color: "#0D9488", fontWeight: 700, letterSpacing: 1, fontFamily: "'Helvetica Neue', Arial, sans-serif", fontSize: 12 }}>
             RUANGAN TAMBAHAN
           </div>
           <table style={{ width: "100%", borderCollapse: "collapse", marginTop: 8, fontSize: 13 }}>
@@ -183,7 +183,7 @@ export default function ReportPrint() {
       {/* Attendance photo */}
       {r.attendance_image && (
         <div style={{ marginTop: 24, pageBreakBefore: "auto" }}>
-          <div style={{ background: "#DDE3EE", border: "1.5px solid #1E3A5F", padding: "6px 14px", color: "#1E3A5F", fontWeight: 800, letterSpacing: 1, fontFamily: "'Helvetica Neue', Arial, sans-serif", fontSize: 12 }}>
+          <div style={{ background: "#DDE3EE", border: "1.5px solid #B91C1C", padding: "6px 14px", color: "#B91C1C", fontWeight: 800, letterSpacing: 1, fontFamily: "'Helvetica Neue', Arial, sans-serif", fontSize: 12 }}>
             GAMBAR KEHADIRAN
           </div>
           <img src={r.attendance_image} alt="attendance" style={{ marginTop: 8, maxWidth: "100%", maxHeight: 380, border: "1px solid #E5E7EB" }} />
@@ -191,13 +191,13 @@ export default function ReportPrint() {
       )}
 
       {/* Footer */}
-      <footer style={{ marginTop: 30, borderTop: "3px solid #1E3A5F", paddingTop: 6, display: "flex", justifyContent: "space-between", fontSize: 10, fontFamily: "'Helvetica Neue', Arial, sans-serif" }}>
-        <span style={{ fontWeight: 800, letterSpacing: 1, color: "#1E3A5F" }}>❝ HOMEROOM MUTIARA MRSM</span>
+      <footer style={{ marginTop: 30, borderTop: "3px solid #B91C1C", paddingTop: 6, display: "flex", justifyContent: "space-between", fontSize: 10, fontFamily: "'Helvetica Neue', Arial, sans-serif" }}>
+        <span style={{ fontWeight: 800, letterSpacing: 1, color: "#B91C1C" }}>❝ HOMEROOM MUTIARA MRSM</span>
         <span style={{ color: "#6B7280" }}>DocAtt · {new Date().toLocaleDateString()} · #{r.id.slice(0, 6)}</span>
       </footer>
 
       <div className="no-print" style={{ marginTop: 22, textAlign: "center" }}>
-        <button onClick={() => window.print()} style={{ padding: "10px 24px", background: "#1E3A5F", color: "white", border: 0, borderRadius: 8, cursor: "pointer", fontWeight: 700 }}>
+        <button onClick={() => window.print()} style={{ padding: "10px 24px", background: "#B91C1C", color: "white", border: 0, borderRadius: 8, cursor: "pointer", fontWeight: 700 }}>
           Print / Save as PDF
         </button>
       </div>

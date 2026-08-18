@@ -42,13 +42,13 @@ export default function Gallery() {
       <AppHeader />
       <main className="max-w-7xl mx-auto px-4 md:px-8 py-10">
         <button onClick={() => nav("/dashboard")}
-                className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-[#1E3A5F]">
+                className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-[#B91C1C]">
           <ArrowLeft className="h-4 w-4" /> {t(lang, "back")}
         </button>
 
         <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.22em] font-semibold" style={{color: "#4F46E5"}}>05 · Media</p>
+            <p className="text-xs uppercase tracking-[0.22em] font-semibold" style={{color: "#0D9488"}}>05 · Media</p>
             <h1 className="mt-2 font-heading text-4xl md:text-5xl font-extrabold flex items-center gap-3">
               <ImageIcon className="h-10 w-10" /> {t(lang, "gallery")}
             </h1>
@@ -83,7 +83,7 @@ export default function Gallery() {
           {items.map(g => (
             <button key={g.report_id} data-testid={`gal-item-${g.report_id}`}
                     onClick={() => setPreview(g)}
-                    className="group relative rounded-xl overflow-hidden bg-white border border-neutral-200 hover:border-[#4F46E5]/50 transition text-left">
+                    className="group relative rounded-xl overflow-hidden bg-white border border-neutral-200 hover:border-[#0D9488]/50 transition text-left">
               <img src={g.image} alt="" className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-500" />
               <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/85 via-black/50 to-transparent text-white">
                 <p className="text-[11px] uppercase tracking-wider text-white/70">{g.form} · {g.homeroom}</p>
@@ -100,7 +100,7 @@ export default function Gallery() {
           <DialogContent className="max-w-3xl p-0 overflow-hidden">
             <img src={preview.image} alt="" className="w-full max-h-[75vh] object-contain bg-black" />
             <div className="p-4 flex flex-wrap items-center gap-2">
-              <Badge variant="outline" style={{borderColor:"#4F46E540", color:"#4F46E5"}}>{preview.form}</Badge>
+              <Badge variant="outline" style={{borderColor:"#0D948840", color:"#0D9488"}}>{preview.form}</Badge>
               <Badge variant="outline">{preview.homeroom}</Badge>
               <span className="text-sm font-medium ml-1">{preview.module_title}</span>
               <span className="text-xs text-neutral-500 ml-auto">{preview.date} · {preview.submitted_by_name}</span>

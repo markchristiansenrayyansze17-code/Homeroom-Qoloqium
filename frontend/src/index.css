@@ -9,19 +9,19 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #121212;
-    background-color: #FBF7F1;
+    background-color: #FFF8EC;
     background-image:
-        radial-gradient(1200px 800px at 92% -8%, rgba(255, 199, 44, 0.28), transparent 60%),
-        radial-gradient(900px 700px at -10% 10%, rgba(99, 102, 241, 0.22), transparent 55%),
-        radial-gradient(1000px 800px at 80% 100%, rgba(244, 114, 182, 0.20), transparent 55%),
-        radial-gradient(900px 700px at 15% 95%, rgba(16, 185, 129, 0.18), transparent 60%),
-        radial-gradient(700px 500px at 55% 45%, rgba(14, 165, 233, 0.10), transparent 60%);
+        radial-gradient(1200px 800px at 92% -8%, rgba(245, 158, 11, 0.42), transparent 60%),
+        radial-gradient(900px 700px at -10% 8%, rgba(185, 28, 28, 0.28), transparent 55%),
+        radial-gradient(1000px 800px at 82% 100%, rgba(234, 88, 12, 0.30), transparent 55%),
+        radial-gradient(900px 700px at 12% 95%, rgba(13, 148, 136, 0.24), transparent 60%),
+        radial-gradient(700px 500px at 55% 45%, rgba(124, 58, 237, 0.10), transparent 60%);
     background-attachment: fixed;
     background-repeat: no-repeat;
     min-height: 100vh;
 }
 
-/* Playful dotted grain overlay across the whole page */
+/* Iban-textile inspired dot + diamond overlay */
 body::before {
     content: "";
     position: fixed;
@@ -29,14 +29,14 @@ body::before {
     pointer-events: none;
     z-index: 0;
     background-image:
-        radial-gradient(rgba(30, 58, 95, 0.06) 1px, transparent 1px),
-        radial-gradient(rgba(30, 58, 95, 0.04) 1px, transparent 1px);
+        radial-gradient(rgba(185, 28, 28, 0.06) 1px, transparent 1px),
+        radial-gradient(rgba(13, 148, 136, 0.05) 1px, transparent 1px);
     background-size: 22px 22px, 44px 44px;
     background-position: 0 0, 11px 11px;
-    opacity: 0.7;
+    opacity: 0.8;
 }
 
-/* Floating colorful confetti dots */
+/* Sarawak-flag confetti — red, gold, teal, orange, purple */
 body::after {
     content: "";
     position: fixed;
@@ -44,21 +44,22 @@ body::after {
     pointer-events: none;
     z-index: 0;
     background-image:
-        radial-gradient(circle at 12% 22%, #F59E0B 0 4px, transparent 5px),
-        radial-gradient(circle at 88% 30%, #4F46E5 0 5px, transparent 6px),
-        radial-gradient(circle at 20% 78%, #E11D48 0 4px, transparent 5px),
-        radial-gradient(circle at 75% 82%, #059669 0 5px, transparent 6px),
-        radial-gradient(circle at 55% 12%, #0EA5E9 0 3px, transparent 4px),
-        radial-gradient(circle at 8% 55%, #F472B6 0 3px, transparent 4px),
-        radial-gradient(circle at 95% 60%, #FBBF24 0 4px, transparent 5px),
-        radial-gradient(circle at 40% 90%, #6366F1 0 3px, transparent 4px);
-    opacity: 0.35;
+        radial-gradient(circle at 12% 22%, #F59E0B 0 5px, transparent 6px),
+        radial-gradient(circle at 88% 30%, #B91C1C 0 5px, transparent 6px),
+        radial-gradient(circle at 20% 78%, #0D9488 0 4px, transparent 5px),
+        radial-gradient(circle at 75% 82%, #EA580C 0 5px, transparent 6px),
+        radial-gradient(circle at 55% 12%, #7C3AED 0 3px, transparent 4px),
+        radial-gradient(circle at 8% 55%, #FBBF24 0 4px, transparent 5px),
+        radial-gradient(circle at 95% 60%, #DC2626 0 4px, transparent 5px),
+        radial-gradient(circle at 40% 90%, #14B8A6 0 3px, transparent 4px),
+        radial-gradient(circle at 68% 55%, #F97316 0 3px, transparent 4px);
+    opacity: 0.42;
     animation: confetti-drift 18s ease-in-out infinite alternate;
 }
 
 @keyframes confetti-drift {
     from { transform: translate3d(0, 0, 0); }
-    to   { transform: translate3d(-8px, -14px, 0); }
+    to   { transform: translate3d(-10px, -14px, 0); }
 }
 
 .App { position: relative; z-index: 1; }
@@ -76,7 +77,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
         --card-foreground: 0 0% 7%;
         --popover: 0 0% 100%;
         --popover-foreground: 0 0% 7%;
-        --primary: 214 51% 25%;
+        --primary: 0 79% 42%;
         --primary-foreground: 0 0% 100%;
         --secondary: 45 100% 58%;
         --secondary-foreground: 0 0% 7%;
@@ -88,12 +89,12 @@ h1, h2, h3, h4, h5, h6, .font-heading {
         --destructive-foreground: 0 0% 100%;
         --border: 240 5% 88%;
         --input: 240 5% 88%;
-        --ring: 214 51% 25%;
-        --chart-1: 214 51% 25%;
+        --ring: 0 79% 42%;
+        --chart-1: 0 79% 42%;
         --chart-2: 45 100% 58%;
-        --chart-3: 220 15% 40%;
+        --chart-3: 173 84% 32%;
         --chart-4: 24 90% 55%;
-        --chart-5: 160 60% 40%;
+        --chart-5: 262 84% 60%;
         --radius: 0.65rem;
     }
 }
@@ -113,8 +114,8 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 .tile-hover:hover {
     transform: translateY(-6px);
-    box-shadow: 0 24px 50px -20px rgba(30, 58, 95, 0.25);
-    border-color: rgba(79, 70, 229, 0.35);
+    box-shadow: 0 24px 50px -20px rgba(185, 28, 28, 0.30);
+    border-color: rgba(185, 28, 28, 0.35);
 }
 
 .grain-overlay {
@@ -143,7 +144,9 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 .stagger > *:nth-child(3) { animation-delay: 0.20s; }
 .stagger > *:nth-child(4) { animation-delay: 0.28s; }
 
-.brand-navy { color: #1E3A5F; }
-.bg-brand-navy { background-color: #1E3A5F; }
-.brand-yellow { color: #FFC72C; }
-.bg-brand-yellow { background-color: #FFC72C; }
+.brand-red { color: #B91C1C; }
+.bg-brand-red { background-color: #B91C1C; }
+.brand-yellow { color: #F59E0B; }
+.bg-brand-yellow { background-color: #F59E0B; }
+.brand-teal { color: #0D9488; }
+.bg-brand-teal { background-color: #0D9488; }

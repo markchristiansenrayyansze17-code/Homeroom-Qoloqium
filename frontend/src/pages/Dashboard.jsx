@@ -15,10 +15,10 @@ const TILES = [
     desc_key: "module_master_desc",
     icon: BookOpenCheck,
     route: "/module-master",
-    // Indigo → cobalt
-    gradient: "linear-gradient(135deg, #6366F1 0%, #4F46E5 100%)",
-    aura: "#6366F1",
-    text: "#4F46E5",
+    // Sarawak Red
+    gradient: "linear-gradient(135deg, #DC2626 0%, #B91C1C 100%)",
+    aura: "#DC2626",
+    text: "#B91C1C",
   },
   {
     id: "tile-cotw",
@@ -26,7 +26,7 @@ const TILES = [
     desc_key: "cotw_desc",
     icon: Trophy,
     route: "/cotw",
-    // Amber → orange
+    // Sarawak Gold → Amber
     gradient: "linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%)",
     aura: "#F59E0B",
     text: "#B45309",
@@ -37,10 +37,10 @@ const TILES = [
     desc_key: "edustation_desc",
     icon: GraduationCap,
     route: "/edustation",
-    // Emerald → teal
-    gradient: "linear-gradient(135deg, #34D399 0%, #059669 100%)",
-    aura: "#10B981",
-    text: "#047857",
+    // Rainforest Teal
+    gradient: "linear-gradient(135deg, #14B8A6 0%, #0D9488 100%)",
+    aura: "#14B8A6",
+    text: "#0F766E",
   },
   {
     id: "tile-homeroom-arena",
@@ -48,10 +48,10 @@ const TILES = [
     desc_key: "homeroom_arena_desc",
     icon: ClipboardList,
     route: "/homeroom-arena",
-    // Rose → crimson
-    gradient: "linear-gradient(135deg, #FB7185 0%, #E11D48 100%)",
-    aura: "#F43F5E",
-    text: "#BE123C",
+    // Hornbill Orange
+    gradient: "linear-gradient(135deg, #F97316 0%, #EA580C 100%)",
+    aura: "#F97316",
+    text: "#C2410C",
   },
 ];
 
@@ -96,7 +96,7 @@ export default function Dashboard() {
       <AppHeader />
       <main className="max-w-7xl mx-auto px-4 md:px-8 py-10 md:py-16">
         <div className="animate-fade-up">
-          <p className="text-xs uppercase tracking-[0.22em] font-semibold" style={{color: "#4F46E5"}}>
+          <p className="text-xs uppercase tracking-[0.22em] font-semibold" style={{color: "#B91C1C"}}>
             {t(lang, "welcome")}, {user.name}
           </p>
           <h1 className="mt-3 font-heading text-4xl md:text-5xl font-extrabold text-neutral-900 leading-tight">
@@ -127,7 +127,7 @@ export default function Dashboard() {
               data-testid="admin-panel-btn"
               onClick={() => nav("/admin")}
               className="inline-flex items-center gap-2 h-11 px-6 rounded-full text-white font-semibold text-sm shadow-lg hover:opacity-95 transition"
-              style={{background: "linear-gradient(135deg, #1E3A5F 0%, #4F46E5 100%)"}}
+              style={{background: "linear-gradient(135deg, #B91C1C 0%, #EA580C 100%)"}}
             >
               {t(lang, "admin_panel")}
               <ArrowUpRight className="h-4 w-4" />
@@ -140,21 +140,21 @@ export default function Dashboard() {
           <button
             data-testid="quicknav-library"
             onClick={() => nav("/module-library")}
-            className="inline-flex items-center gap-2 h-11 px-5 rounded-full bg-white border-2 border-neutral-200 hover:border-indigo-400 text-sm font-semibold text-neutral-800 transition shadow-sm"
+            className="inline-flex items-center gap-2 h-11 px-5 rounded-full bg-white border-2 border-neutral-200 hover:border-red-500 text-sm font-semibold text-neutral-800 transition shadow-sm"
           >
-            <Library className="h-4 w-4 text-indigo-600" /> {t(lang, "module_library")}
+            <Library className="h-4 w-4 text-[#B91C1C]" /> {t(lang, "module_library")}
           </button>
           <button
             data-testid="quicknav-gallery"
             onClick={() => nav("/gallery")}
-            className="inline-flex items-center gap-2 h-11 px-5 rounded-full bg-white border-2 border-neutral-200 hover:border-rose-400 text-sm font-semibold text-neutral-800 transition shadow-sm"
+            className="inline-flex items-center gap-2 h-11 px-5 rounded-full bg-white border-2 border-neutral-200 hover:border-teal-500 text-sm font-semibold text-neutral-800 transition shadow-sm"
           >
-            <ImageIcon className="h-4 w-4 text-rose-600" /> {t(lang, "gallery")}
+            <ImageIcon className="h-4 w-4 text-[#0D9488]" /> {t(lang, "gallery")}
           </button>
         </div>
 
         <p className="mt-16 text-center text-[10px] uppercase tracking-[0.35em] text-neutral-400">
-          <span className="font-heading font-bold text-[#1E3A5F]">{t(lang, "school_motto")}</span>
+          <span className="font-heading font-bold text-[#B91C1C]">{t(lang, "school_motto")}</span>
           <span className="mx-3 text-neutral-300">·</span>
           {t(lang, "motto")}
         </p>

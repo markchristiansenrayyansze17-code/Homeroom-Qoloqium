@@ -29,7 +29,7 @@ export function AppHeader() {
                 aria-label="Home"
                 className="rounded-full h-10 w-10"
               >
-                <Home className="h-5 w-5 text-[#1E3A5F]" />
+                <Home className="h-5 w-5 text-[#B91C1C]" />
               </Button>
               <Button
                 data-testid="nav-logout-btn"
@@ -58,7 +58,7 @@ export function AppHeader() {
             <Badge
               data-testid="user-badge"
               variant="outline"
-              className="hidden md:inline-flex border-[#1E3A5F]/30 text-[#1E3A5F] font-medium"
+              className="hidden md:inline-flex border-[#B91C1C]/30 text-[#B91C1C] font-medium"
             >
               {user.role.toUpperCase()} · {user.name}
             </Badge>

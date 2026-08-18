@@ -54,13 +54,13 @@ export default function ModuleLibrary() {
       <AppHeader />
       <main className="max-w-7xl mx-auto px-4 md:px-8 py-10">
         <button onClick={() => nav("/dashboard")}
-                className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-[#1E3A5F]">
+                className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-[#B91C1C]">
           <ArrowLeft className="h-4 w-4" /> {t(lang, "back")}
         </button>
 
         <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.22em] font-semibold" style={{color: "#4F46E5"}}>06 · Archive</p>
+            <p className="text-xs uppercase tracking-[0.22em] font-semibold" style={{color: "#0D9488"}}>06 · Archive</p>
             <h1 className="mt-2 font-heading text-4xl md:text-5xl font-extrabold flex items-center gap-3">
               <Library className="h-10 w-10" /> {t(lang, "module_library")}
             </h1>
@@ -86,7 +86,7 @@ export default function ModuleLibrary() {
             byForm[f] && byForm[f].length > 0 && (
               <section key={f}>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="h-8 w-1.5 rounded-full" style={{background: "linear-gradient(180deg,#6366F1,#4F46E5)"}} />
+                  <div className="h-8 w-1.5 rounded-full" style={{background: "linear-gradient(180deg,#DC2626,#0D9488)"}} />
                   <h2 className="font-heading text-2xl font-bold">{f}</h2>
                   <Badge variant="outline" className="ml-1">{byForm[f].length}</Badge>
                 </div>

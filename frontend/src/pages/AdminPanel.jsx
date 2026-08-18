@@ -16,7 +16,7 @@ import { ArrowLeft, Plus, Pencil, Trash2, Users, UserSquare2, PieChart as PieIco
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 
 const FORMS = ["Form 1", "Form 2", "Form 3", "Form 4", "Form 5"];
-const COLORS = ["#1E3A5F", "#FFC72C", "#334155", "#EA580C", "#059669"];
+const COLORS = ["#B91C1C", "#F59E0B", "#0D9488", "#EA580C", "#7C3AED"];
 
 export default function AdminPanel() {
   const { user, lang } = useAuth();
@@ -30,11 +30,11 @@ export default function AdminPanel() {
       <AppHeader />
       <main className="max-w-6xl mx-auto px-4 md:px-8 py-10">
         <button onClick={() => nav("/dashboard")}
-                className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-[#1E3A5F]">
+                className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-[#B91C1C]">
           <ArrowLeft className="h-4 w-4" /> {t(lang, "back")}
         </button>
         <div className="mt-4">
-          <p className="text-xs uppercase tracking-[0.22em] text-[#1E3A5F] font-semibold">Admin</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-[#B91C1C] font-semibold">Admin</p>
           <h1 className="mt-2 font-heading text-4xl md:text-5xl font-extrabold">{t(lang, "admin_panel")}</h1>
         </div>
 
@@ -93,7 +93,7 @@ function Overview() {
         ].map(([k, v]) => (
           <Card key={k} className="p-5 rounded-xl border-neutral-200">
             <p className="text-xs uppercase tracking-widest text-neutral-500">{t(lang, k)}</p>
-            <p className="mt-2 font-heading text-4xl font-extrabold" style={{color: "#4F46E5"}}>{v ?? 0}</p>
+            <p className="mt-2 font-heading text-4xl font-extrabold" style={{color: "#0D9488"}}>{v ?? 0}</p>
           </Card>
         ))}
       </div>
@@ -129,7 +129,7 @@ function Overview() {
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="value" fill="#4F46E5" name={t(lang, "submitted")} />
+                <Bar dataKey="value" fill="#B91C1C" name={t(lang, "submitted")} />
                 <Bar dataKey="total" fill="#F59E0B" name={t(lang, "homeroom") + "s"} />
               </BarChart>
             </ResponsiveContainer>
@@ -165,7 +165,7 @@ function StudentsTab() {
     <div className="space-y-4">
       <div className="flex flex-wrap gap-3 justify-between items-center">
         <Input data-testid="student-search" placeholder="Search…" value={q} onChange={e => setQ(e.target.value)} className="max-w-sm" />
-        <Button data-testid="add-student-btn" onClick={() => setDlg({})} className="bg-[#1E3A5F] hover:bg-[#152A45] gap-2">
+        <Button data-testid="add-student-btn" onClick={() => setDlg({})} className="bg-[#B91C1C] hover:bg-[#7F1D1D] gap-2">
           <Plus className="h-4 w-4" /> {t(lang, "students")}
         </Button>
       </div>
@@ -244,7 +244,7 @@ function StudentDialog({ s, homerooms, onClose, onSaved }) {
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>{t(lang, "cancel")}</Button>
-          <Button data-testid="stu-save" onClick={save} disabled={!name || !mn || !hr} className="bg-[#1E3A5F] hover:bg-[#152A45]">{t(lang, "save")}</Button>
+          <Button data-testid="stu-save" onClick={save} disabled={!name || !mn || !hr} className="bg-[#B91C1C] hover:bg-[#7F1D1D]">{t(lang, "save")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -267,7 +267,7 @@ function TeachersTab() {
     <div className="space-y-4">
       <div className="flex flex-wrap gap-3 justify-between items-center">
         <Input data-testid="teacher-search" placeholder="Search…" value={q} onChange={e => setQ(e.target.value)} className="max-w-sm" />
-        <Button data-testid="add-teacher-btn" onClick={() => setDlg({})} className="bg-[#1E3A5F] hover:bg-[#152A45] gap-2">
+        <Button data-testid="add-teacher-btn" onClick={() => setDlg({})} className="bg-[#B91C1C] hover:bg-[#7F1D1D] gap-2">
           <Plus className="h-4 w-4" /> {t(lang, "teachers")}
         </Button>
       </div>
@@ -338,7 +338,7 @@ function TeacherDialog({ t2, onClose, onSaved }) {
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>{t(lang, "cancel")}</Button>
-          <Button data-testid="teacher-save" onClick={save} disabled={!name || !code} className="bg-[#1E3A5F] hover:bg-[#152A45]">{t(lang, "save")}</Button>
+          <Button data-testid="teacher-save" onClick={save} disabled={!name || !code} className="bg-[#B91C1C] hover:bg-[#7F1D1D]">{t(lang, "save")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -352,7 +352,7 @@ function ModulesTab() {
   return (
     <Card className="p-8 text-center">
       <p className="text-neutral-600">{t(lang, "modules")} are managed from the {t(lang, "module_master")} screen with all filters and creation controls.</p>
-      <Button data-testid="go-module-master" onClick={() => nav("/module-master")} className="mt-6 bg-[#1E3A5F] hover:bg-[#152A45]">
+      <Button data-testid="go-module-master" onClick={() => nav("/module-master")} className="mt-6 bg-[#B91C1C] hover:bg-[#7F1D1D]">
         {t(lang, "module_master")}
       </Button>
     </Card>
