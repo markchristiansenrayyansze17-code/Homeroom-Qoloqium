@@ -6,12 +6,19 @@ from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
+import re
+import ipaddress
 import logging
+from html import escape
+from html.parser import HTMLParser
+from urllib.parse import urlparse
+import httpx
 from pathlib import Path
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, EmailStr
 from typing import Optional, List, Literal, Any
 import uuid
-from datetime import datetime, timezone
+import random
+from datetime import datetime, timezone, timedelta
 import jwt
 
 ROOT_DIR = Path(__file__).parent
@@ -20,7 +27,12 @@ load_dotenv(ROOT_DIR / '.env')
 MONGO_URL = os.environ['MONGO_URL']
 DB_NAME = os.environ['DB_NAME']
 JWT_SECRET = os.environ.get('JWT_SECRET', 'docatt-mrsm-kuching-secret-2026')
-ADMIN_CODE = "MK1993"
+DEFAULT_ADMIN_CODE = "MK1993"
+
+# Email (Emergent-managed Resend proxy)
+EMAIL_BASE_URL = "https://integrations.emergentagent.com"
+EMAIL_KEY = os.environ.get("EMERGENT_EMAIL_KEY", "")
+EMAIL_FROM_NAME = os.environ.get("EMAIL_FROM_NAME", "DocAtt MRSM Kuching")
 
 client = AsyncIOMotorClient(MONGO_URL)
 db = client[DB_NAME]
@@ -130,6 +142,8 @@ class Report(BaseModel):
     hr_upload_name: Optional[str] = None
     description: str = ""
     attendance_image: Optional[str] = None  # base64
+    activity_image: Optional[str] = None  # base64 - for activity/artwork gallery
+    activity_caption: str = ""
     custom_values: dict = Field(default_factory=dict)
     created_at: str = Field(default_factory=now_iso)
     updated_at: str = Field(default_factory=now_iso)
@@ -142,6 +156,8 @@ class ReportIn(BaseModel):
     hr_upload_name: Optional[str] = None
     description: str = ""
     attendance_image: Optional[str] = None
+    activity_image: Optional[str] = None
+    activity_caption: str = ""
     custom_values: dict = {}
 
 class ReportUpdate(BaseModel):
@@ -151,6 +167,8 @@ class ReportUpdate(BaseModel):
     hr_upload_name: Optional[str] = None
     description: Optional[str] = None
     attendance_image: Optional[str] = None
+    activity_image: Optional[str] = None
+    activity_caption: Optional[str] = None
     custom_values: Optional[dict] = None
 
 class COTWEntry(BaseModel):
@@ -242,8 +260,10 @@ def strip_id(d):
 @api.post("/auth/login")
 async def login(body: LoginIn):
     ident = body.identifier.strip()
-    # Admin backdoor
-    if ident == ADMIN_CODE:
+    # Admin backdoor — code is dynamic (stored in settings), defaults to MK1993
+    settings = await db.settings.find_one({"_id": "singleton"}) or {}
+    admin_code = settings.get("admin_code", DEFAULT_ADMIN_CODE)
+    if ident == admin_code:
         token = make_token({"user_id": "admin", "role": "admin", "name": "Admin MRSM Kuching"})
         return {"token": token, "user": {"id": "admin", "role": "admin", "name": "Admin MRSM Kuching"}}
     if body.role == "student":
@@ -415,6 +435,8 @@ async def create_report(body: ReportIn, user: dict = Depends(current_user)):
         hr_upload_name=body.hr_upload_name,
         description=body.description,
         attendance_image=body.attendance_image,
+        activity_image=body.activity_image,
+        activity_caption=body.activity_caption or "",
         custom_values=body.custom_values or {},
     )
     await db.reports.insert_one(r.model_dump())
@@ -564,6 +586,277 @@ async def report_full(rid: str, user: dict = Depends(current_user)):
 @api.get("/")
 async def root():
     return {"app": "DocAtt MRSM Kuching", "status": "ok"}
+
+# ============================================================
+#                    LANDING PAGE + CMS
+# ============================================================
+
+class LandingItem(BaseModel):
+    id: str = Field(default_factory=new_id)
+    kind: Literal["banner", "news", "stat", "uniqueness"]
+    image: Optional[str] = None
+    title: str = ""
+    description: str = ""
+    value: str = ""          # for stat (the big number)
+    link: Optional[str] = None  # for news
+    order: int = 0
+    active: bool = True
+    created_at: str = Field(default_factory=now_iso)
+
+class LandingItemIn(BaseModel):
+    kind: Literal["banner", "news", "stat", "uniqueness"]
+    image: Optional[str] = None
+    title: str = ""
+    description: str = ""
+    value: str = ""
+    link: Optional[str] = None
+    order: int = 0
+    active: bool = True
+
+class LandingSettings(BaseModel):
+    news_columns: int = 3  # 3 or 6
+    show_keistimewaan: bool = True
+
+@api.get("/public/landing")
+async def public_landing():
+    items = await db.landing.find({"active": True}, {"_id": 0}).sort("order", 1).to_list(500)
+    banners = [i for i in items if i["kind"] == "banner"]
+    news = [i for i in items if i["kind"] == "news"]
+    stats = [i for i in items if i["kind"] == "stat"]
+    uniqueness = [i for i in items if i["kind"] == "uniqueness"]
+    settings = await db.settings.find_one({"_id": "singleton"}) or {}
+    live_stats = {
+        "students": await db.students.count_documents({}),
+        "teachers": await db.teachers.count_documents({}),
+        "modules": await db.modules.count_documents({}),
+        "homerooms": await db.teachers.count_documents({}),
+    }
+    return {
+        "banners": banners,
+        "news": news,
+        "stats": stats,
+        "uniqueness": uniqueness,
+        "settings": {
+            "news_columns": settings.get("news_columns", 3),
+            "show_keistimewaan": settings.get("show_keistimewaan", True),
+        },
+        "live": live_stats,
+    }
+
+@api.get("/public/gallery")
+async def public_gallery(category: str = "all"):
+    reports = await db.reports.find({}, {"_id": 0}).sort("created_at", -1).to_list(2000)
+    modules_map = {m["id"]: m["title"] async for m in db.modules.find({}, {"_id": 0, "id": 1, "title": 1})}
+    out = []
+    for r in reports:
+        base = {
+            "id": r["id"], "homeroom": r["homeroom"], "form": r["form"],
+            "module_title": modules_map.get(r["module_id"], "—"),
+            "date": r.get("date"), "created_at": r["created_at"],
+        }
+        if r.get("attendance_image") and category in ("all", "homeroom"):
+            out.append({**base, "image": r["attendance_image"], "category": "homeroom"})
+        if r.get("activity_image") and category in ("all", "activity"):
+            out.append({**base, "image": r["activity_image"], "category": "activity"})
+    return out
+
+@api.get("/landing/settings")
+async def get_landing_settings(user: dict = Depends(current_user)):
+    s = await db.settings.find_one({"_id": "singleton"}) or {}
+    return {"news_columns": s.get("news_columns", 3), "show_keistimewaan": s.get("show_keistimewaan", True)}
+
+@api.put("/landing/settings")
+async def update_landing_settings(body: LandingSettings, _: dict = Depends(require_admin)):
+    await db.settings.update_one({"_id": "singleton"}, {"$set": body.model_dump()}, upsert=True)
+    return {"ok": True}
+
+@api.get("/landing")
+async def list_landing(user: dict = Depends(current_user)):
+    items = await db.landing.find({}, {"_id": 0}).sort("order", 1).to_list(500)
+    return items
+
+@api.post("/landing")
+async def create_landing(body: LandingItemIn, _: dict = Depends(require_admin)):
+    item = LandingItem(**body.model_dump())
+    await db.landing.insert_one(item.model_dump())
+    return item.model_dump()
+
+@api.put("/landing/{lid}")
+async def update_landing(lid: str, body: LandingItemIn, _: dict = Depends(require_admin)):
+    r = await db.landing.update_one({"id": lid}, {"$set": body.model_dump()})
+    if r.matched_count == 0:
+        raise HTTPException(404, "Not found")
+    return {"ok": True}
+
+@api.delete("/landing/{lid}")
+async def delete_landing(lid: str, _: dict = Depends(require_admin)):
+    await db.landing.delete_one({"id": lid})
+    return {"ok": True}
+
+# ============================================================
+#           ADMIN PASSCODE CHANGE (Email verification)
+# ============================================================
+
+# Email helpers per Resend playbook
+_SHORTENERS = ("bit.ly","tinyurl.com","t.co","is.gd","cutt.ly","goo.gl","rebrand.ly")
+_CRED_ASK = ("reply with your password","reply with the code","send your password","cvv",
+             "send us your password","enter your password below","confirm your card number",
+             "your full card number","seed phrase","recovery phrase","verify your card",
+             "social security number","confirm your bank details")
+_HOSTISH = re.compile(r"\b(?:https?://)?((?:[a-z0-9-]+\.)+[a-z]{2,})", re.I)
+
+def _host_ok(host: str) -> bool:
+    if not host or "xn--" in host:
+        return False
+    try:
+        ipaddress.ip_address(host); return False
+    except ValueError:
+        pass
+    return not any(host == s or host.endswith("." + s) for s in _SHORTENERS)
+
+def _same_site(shown: str, real: str) -> bool:
+    return shown == real or real.endswith("." + shown) or shown.endswith("." + real)
+
+class _EmailScan(HTMLParser):
+    def __init__(self):
+        super().__init__(); self.tags, self.urls, self.anchors = set(), [], []
+        self._href, self._text = None, []
+    def handle_starttag(self, tag, attrs):
+        self.tags.add(tag.lower())
+        self.urls += [v for k,v in attrs if k.lower() in ("href","src") and v]
+        if tag.lower() == "a":
+            self._href = dict((k.lower(),v) for k,v in attrs).get("href")
+            self._text = []
+    def handle_data(self, data):
+        if self._href is not None: self._text.append(data)
+    def handle_endtag(self, tag):
+        if tag.lower() == "a" and self._href is not None:
+            self.anchors.append((self._href, "".join(self._text)))
+            self._href, self._text = None, []
+
+def _assert_safe_email(subject: str, html: str) -> None:
+    scan = _EmailScan(); scan.feed(html)
+    if scan.tags & {"form","input","textarea","select"}:
+        raise ValueError("No forms or input fields in email (G2)")
+    body = f"{subject}\n{html}".lower()
+    for p in _CRED_ASK:
+        if p in body:
+            raise ValueError(f"Email asks the recipient for credentials: {p!r} (G2)")
+    for url in scan.urls:
+        low = url.strip().lower()
+        if low.startswith(("mailto:","tel:","cid:","#")): continue
+        if not low.startswith("https://"):
+            raise ValueError(f"Email links/assets must be absolute https: {url!r} (G3)")
+        host = urlparse(low).hostname or ""
+        if not _host_ok(host) or urlparse(low).username is not None:
+            raise ValueError(f"Shortened, numeric-host or credential-bearing URL: {url!r} (G3)")
+    for href, text in scan.anchors:
+        real = urlparse(href.strip().lower()).hostname or ""
+        if not real: continue
+        for m in _HOSTISH.finditer(text):
+            if not _same_site(m.group(1).lower(), real):
+                raise ValueError(f"Anchor text {m.group(1)!r} ≠ real link host {real!r} (G3)")
+
+async def send_email(*, to: str, subject: str, html: str) -> Optional[str]:
+    if not EMAIL_KEY:
+        logger.warning("EMERGENT_EMAIL_KEY not set — skipping actual send")
+        return None
+    _assert_safe_email(subject, html)
+    payload = {"to": [to], "subject": subject, "html": html, "from_name": EMAIL_FROM_NAME}
+    try:
+        async with httpx.AsyncClient(timeout=30) as client:
+            resp = await client.post(f"{EMAIL_BASE_URL}/api/v1/email/send",
+                                     headers={"X-Email-Key": EMAIL_KEY}, json=payload)
+        resp.raise_for_status()
+        return resp.json().get("id")
+    except httpx.HTTPStatusError as e:
+        logger.error(f"Email failed: {e.response.status_code} {e.response.text}")
+        raise HTTPException(502, "Failed to send email")
+    except Exception as e:
+        logger.error(f"Email error: {e}")
+        raise HTTPException(500, "Failed to send email")
+
+class PasscodeRequestIn(BaseModel):
+    email: EmailStr
+    new_code: str
+
+class PasscodeVerifyIn(BaseModel):
+    email: EmailStr
+    code: str
+
+@api.post("/admin/passcode/request-code")
+async def passcode_request(body: PasscodeRequestIn, user: dict = Depends(require_admin)):
+    """Admin requests to change their passcode. Sends a 6-digit verification code to email."""
+    new_code = body.new_code.strip().upper()
+    if not new_code or len(new_code) < 4 or len(new_code) > 32:
+        raise HTTPException(400, "New passcode must be 4-32 characters")
+    code = f"{random.randint(0, 999999):06d}"
+    expires = (datetime.now(timezone.utc) + timedelta(minutes=15)).isoformat()
+    await db.passcode_pending.update_one(
+        {"_id": "singleton"},
+        {"$set": {"email": str(body.email), "new_code": new_code, "verify_code": code,
+                  "expires": expires, "used": False}},
+        upsert=True,
+    )
+    subject = "DocAtt MRSM Kuching · Passcode change verification"
+    html = (
+        '<table role="presentation" width="100%" style="background:#FBF7F1;padding:24px 0"><tr><td align="center">'
+        '<table role="presentation" width="560" style="background:white;border-radius:12px;padding:32px;font-family:Arial,sans-serif">'
+        '<tr><td style="border-bottom:3px double #B91C1C;padding-bottom:14px">'
+        '<div style="font-size:11px;color:#7f1d1d;letter-spacing:3px;text-transform:uppercase">MRSM Kuching</div>'
+        '<div style="font-size:26px;font-weight:800;margin-top:4px">DocAtt Admin</div></td></tr>'
+        f'<tr><td style="padding-top:18px;font-size:14px;line-height:22px;color:#111">Salam, kod pengesahan untuk menukar passcode Admin DocAtt:</td></tr>'
+        f'<tr><td style="padding-top:18px" align="center"><div style="display:inline-block;background:#FFF8EC;border:2px dashed #B91C1C;padding:16px 30px;border-radius:12px;font-size:34px;letter-spacing:8px;font-weight:800;color:#B91C1C;font-family:Consolas,monospace">{escape(code)}</div></td></tr>'
+        '<tr><td style="padding-top:14px;font-size:13px;color:#4B5563">Kod ini sah selama <strong>15 minit</strong>. Jika anda tidak meminta perubahan ini, sila abaikan e-mel ini.</td></tr>'
+        f'<tr><td style="padding-top:24px;font-size:11px;color:#9CA3AF;border-top:1px solid #E5E7EB">Sent by {escape(EMAIL_FROM_NAME)}. We never ask you to reply with your password.</td></tr>'
+        '</table></td></tr></table>'
+    )
+    try:
+        eid = await send_email(to=str(body.email), subject=subject, html=html)
+    except Exception as e:
+        logger.error(f"passcode email skipped: {e}")
+        eid = None
+    logger.info(f"[PASSCODE] verification code for {body.email}: {code}")
+    return {"ok": True, "email_id": eid, "dev_code": code if not eid else None}
+
+@api.post("/admin/passcode/verify")
+async def passcode_verify(body: PasscodeVerifyIn, user: dict = Depends(require_admin)):
+    p = await db.passcode_pending.find_one({"_id": "singleton"})
+    if not p or p.get("used"):
+        raise HTTPException(400, "No pending passcode change")
+    if p["email"] != str(body.email):
+        raise HTTPException(400, "Email mismatch")
+    if p["verify_code"] != body.code.strip():
+        raise HTTPException(400, "Invalid verification code")
+    if datetime.fromisoformat(p["expires"]) < datetime.now(timezone.utc):
+        raise HTTPException(400, "Code expired — request a new one")
+    new_code = p["new_code"]
+    await db.settings.update_one({"_id": "singleton"}, {"$set": {"admin_code": new_code}}, upsert=True)
+    await db.passcode_pending.update_one({"_id": "singleton"}, {"$set": {"used": True}})
+    # Confirmation email
+    subject = "DocAtt MRSM Kuching · Passcode changed"
+    html = (
+        '<table role="presentation" width="100%" style="background:#FBF7F1;padding:24px 0"><tr><td align="center">'
+        '<table role="presentation" width="560" style="background:white;border-radius:12px;padding:32px;font-family:Arial,sans-serif">'
+        '<tr><td style="border-bottom:3px double #059669;padding-bottom:14px">'
+        '<div style="font-size:11px;color:#065f46;letter-spacing:3px;text-transform:uppercase">MRSM Kuching</div>'
+        '<div style="font-size:26px;font-weight:800;margin-top:4px;color:#059669">Passcode Aktif</div></td></tr>'
+        '<tr><td style="padding-top:18px;font-size:14px;line-height:22px;color:#111">Passcode Admin DocAtt anda telah berjaya dikemas kini. Guna passcode berikut untuk log masuk sebagai Admin:</td></tr>'
+        f'<tr><td style="padding-top:18px" align="center"><div style="display:inline-block;background:#F0FDF4;border:2px solid #059669;padding:16px 30px;border-radius:12px;font-size:26px;letter-spacing:6px;font-weight:800;color:#065f46;font-family:Consolas,monospace">{escape(new_code)}</div></td></tr>'
+        '<tr><td style="padding-top:14px;font-size:13px;color:#4B5563">Simpan passcode ini di tempat selamat. Jika anda TIDAK membuat perubahan ini, sila hubungi pentadbir sistem serta-merta.</td></tr>'
+        f'<tr><td style="padding-top:24px;font-size:11px;color:#9CA3AF;border-top:1px solid #E5E7EB">Sent by {escape(EMAIL_FROM_NAME)}. We never ask you to reply with your password.</td></tr>'
+        '</table></td></tr></table>'
+    )
+    try:
+        await send_email(to=str(body.email), subject=subject, html=html)
+    except Exception as e:
+        logger.error(f"confirmation email skipped: {e}")
+    return {"ok": True, "message": "Passcode updated"}
+
+# Report activity image support
+class ReportActivityUpdate(BaseModel):
+    activity_image: Optional[str] = None
+    activity_caption: Optional[str] = None
 
 app.include_router(api)
 app.add_middleware(

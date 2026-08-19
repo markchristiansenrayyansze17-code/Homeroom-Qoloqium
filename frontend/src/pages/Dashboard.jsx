@@ -122,7 +122,7 @@ export default function Dashboard() {
         </div>
 
         {user.role === "admin" && (
-          <div className="mt-10">
+          <div className="mt-10 flex flex-wrap gap-3">
             <button
               data-testid="admin-panel-btn"
               onClick={() => nav("/admin")}
@@ -130,6 +130,15 @@ export default function Dashboard() {
               style={{background: "linear-gradient(135deg, #B91C1C 0%, #EA580C 100%)"}}
             >
               {t(lang, "admin_panel")}
+              <ArrowUpRight className="h-4 w-4" />
+            </button>
+            <button
+              data-testid="admin-landing-btn"
+              onClick={() => nav("/admin/landing")}
+              className="inline-flex items-center gap-2 h-11 px-6 rounded-full text-white font-semibold text-sm shadow-lg hover:opacity-95 transition"
+              style={{background: "linear-gradient(135deg, #7C3AED 0%, #B91C1C 100%)"}}
+            >
+              Landing CMS
               <ArrowUpRight className="h-4 w-4" />
             </button>
           </div>
