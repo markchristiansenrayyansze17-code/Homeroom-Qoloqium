@@ -2,7 +2,6 @@ import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BookOpenCheck, Trophy, GraduationCap, ClipboardList, ChevronLeft, ChevronRight, LogIn, Languages, Image as ImageIcon, Newspaper, Sparkles, TrendingUp } from "lucide-react";
-import { Kenyalang, PuaKumbuStrip, PuaKumbuDiamond, FlyingKenyalang } from "../components/SarawakMotifs";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const LOGO = "/mrsm-logo.png";
@@ -114,8 +113,6 @@ export default function Landing() {
             </button>
           </div>
         </div>
-        {/* Pua Kumbu decorative strip under the nav */}
-        <PuaKumbuStrip height={10} />
       </header>
 
       {/* Hero Banner Carousel */}
@@ -123,22 +120,11 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-8">
           <div className="relative rounded-3xl overflow-hidden border-2 border-neutral-200 bg-neutral-100 aspect-[21/9] shadow-xl">
             {(data.banners || []).length === 0 && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-white overflow-hidden"
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-white"
                    style={{ background: "linear-gradient(135deg,#B91C1C 0%,#DC2626 40%,#EA580C 100%)" }}>
-                {/* Kenyalang silhouettes flying across */}
-                <div className="absolute inset-x-0 top-6 text-white/40">
-                  <FlyingKenyalang className="w-full h-14" />
-                </div>
-                <div className="absolute inset-x-0 bottom-8 text-white/25 rotate-180">
-                  <FlyingKenyalang className="w-full h-10" />
-                </div>
-                {/* Pua Kumbu corner diamonds */}
-                <div className="absolute -left-6 -top-6 opacity-70"><PuaKumbuDiamond size={110} /></div>
-                <div className="absolute -right-6 -bottom-6 opacity-70"><PuaKumbuDiamond size={110} colors={["#F59E0B","#B91C1C","#0D9488","#7F1D1D"]} /></div>
-
-                <Sparkles className="h-16 w-16 text-yellow-300 relative" />
-                <h1 className="mt-4 font-heading text-4xl md:text-6xl font-extrabold relative">DocAtt · MRSM Kuching</h1>
-                <p className="mt-2 text-white/90 tracking-widest text-xs md:text-sm relative">{t(lang, "school_motto")}</p>
+                <Sparkles className="h-16 w-16 text-yellow-300" />
+                <h1 className="mt-4 font-heading text-4xl md:text-6xl font-extrabold">DocAtt · MRSM Kuching</h1>
+                <p className="mt-2 text-white/90 tracking-widest text-xs md:text-sm">{t(lang, "school_motto")}</p>
               </div>
             )}
             {(data.banners || []).map((b, i) => (
@@ -271,18 +257,11 @@ export default function Landing() {
 
       {/* Footer */}
       <footer className="border-t border-neutral-200 bg-white/60 py-8">
-        <PuaKumbuStrip height={12} />
-        <div className="max-w-7xl mx-auto px-4 md:px-8 text-center pt-6">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 text-center">
           <img src={LOGO} alt="MRSM" className="h-12 w-12 mx-auto" />
           <p className="mt-3 font-heading font-extrabold text-lg">DocAtt · MRSM Kuching</p>
           <p className="mt-1 text-xs uppercase tracking-[0.3em] text-neutral-500">{t(lang, "motto")}</p>
           <p className="mt-3 text-[10px] uppercase tracking-widest font-bold text-[#B91C1C]">{t(lang, "school_motto")}</p>
-          {/* Kenyalang mascots left + right */}
-          <div className="mt-4 flex items-center justify-center gap-8 opacity-70">
-            <Kenyalang className="h-10 w-16" color="#111" casqueColor="#F59E0B" accent="#B91C1C" />
-            <PuaKumbuDiamond size={40} />
-            <Kenyalang className="h-10 w-16 scale-x-[-1]" color="#111" casqueColor="#F59E0B" accent="#0D9488" />
-          </div>
         </div>
       </footer>
     </div>
@@ -293,18 +272,12 @@ function SectionHeading({ icon: Icon, title, accent }) {
   return (
     <div className="flex items-center justify-center gap-3">
       <div className="h-px w-16 bg-neutral-300" />
-      <svg viewBox="0 0 40 20" className="h-5 w-10" aria-hidden>
-        <path d="M2 10 L 8 4 L 14 10 L 20 4 L 26 10 L 32 4 L 38 10" fill="none" stroke={accent} strokeWidth="2" strokeLinecap="round" />
-        <path d="M2 14 L 8 20 L 14 14 L 20 20 L 26 14 L 32 20 L 38 14" fill="none" stroke={accent} strokeWidth="1.5" opacity="0.55" strokeLinecap="round" />
-      </svg>
+      <div className="h-2 w-2 rounded-full" style={{ background: accent }} />
       <div className="flex items-center gap-2">
         <Icon className="h-6 w-6" style={{ color: accent }} />
         <h2 className="font-heading text-2xl md:text-3xl font-extrabold" style={{ color: accent }}>{title}</h2>
       </div>
-      <svg viewBox="0 0 40 20" className="h-5 w-10" aria-hidden>
-        <path d="M2 10 L 8 4 L 14 10 L 20 4 L 26 10 L 32 4 L 38 10" fill="none" stroke={accent} strokeWidth="2" strokeLinecap="round" />
-        <path d="M2 14 L 8 20 L 14 14 L 20 20 L 26 14 L 32 20 L 38 14" fill="none" stroke={accent} strokeWidth="1.5" opacity="0.55" strokeLinecap="round" />
-      </svg>
+      <div className="h-2 w-2 rounded-full" style={{ background: accent }} />
       <div className="h-px w-16 bg-neutral-300" />
     </div>
   );
