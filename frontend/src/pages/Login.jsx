@@ -10,6 +10,7 @@ import { Label } from "../components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../components/ui/tabs";
 import { toast } from "sonner";
 import { GraduationCap, UserSquare2, ShieldCheck } from "lucide-react";
+import { Kenyalang, PuaKumbuStrip, PuaKumbuDiamond } from "../components/SarawakMotifs";
 
 const LOGO = "/mrsm-logo.png";
 
@@ -47,6 +48,11 @@ export default function Login() {
         <div className="absolute -right-24 -top-24 w-96 h-96 rounded-full bg-[#F59E0B]/35 blur-3xl" />
         <div className="absolute -left-16 -bottom-24 w-96 h-96 rounded-full bg-[#0D9488]/30 blur-3xl" />
         <div className="absolute right-20 top-40 w-72 h-72 rounded-full bg-[#FBBF24]/25 blur-3xl" />
+        {/* Sarawak motifs */}
+        <div className="absolute -right-8 -bottom-8 opacity-80"><PuaKumbuDiamond size={140} colors={["#7F1D1D","#F59E0B","#0D9488","#111"]} /></div>
+        <div className="absolute left-6 bottom-6 opacity-90"><Kenyalang className="h-20 w-32" color="#0F172A" casqueColor="#F59E0B" accent="#FBBF24" /></div>
+        <div className="absolute inset-x-0 top-0"><PuaKumbuStrip height={10} colors={["#F59E0B","#B91C1C","#0D9488","#111"]} /></div>
+        <div className="absolute inset-x-0 bottom-0"><PuaKumbuStrip height={10} colors={["#0D9488","#F59E0B","#B91C1C","#111"]} /></div>
         <div className="relative z-10">
           <img src={LOGO} alt="MRSM Kuching" className="h-24 w-24 drop-shadow-2xl" />
           <p className="mt-8 text-xs uppercase tracking-[0.3em] text-white/70">Maktab Rendah Sains Mara</p>

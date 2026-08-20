@@ -4,6 +4,7 @@ import { useAuth } from "../lib/auth";
 import { t } from "../lib/i18n";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
+import { PuaKumbuStrip } from "./SarawakMotifs";
 
 const LOGO = "/mrsm-logo.png";
 
@@ -79,6 +80,7 @@ export function AppHeader() {
           />
         </div>
       </div>
+      <PuaKumbuStrip height={8} />
     </header>
   );
 }
